@@ -35,7 +35,7 @@ namespace M2.Basic_Coding
             {
                 if (index >= binSecondNum.Length)
                     binResult[binResult.Length - 1 - x] = (char)0;
-                else binResult[binResult.Length - 1 - x] = binSecondNum[index];
+                else binResult[binResult.Length - 1 - x] = binSecondNum[binSecondNum.Length-index-1];
                 index--;
             }
 
@@ -85,6 +85,8 @@ namespace M2.Basic_Coding
         {
             if (index == array.Length - 1)
                 return -1;
+            if (array.Length == 0)
+                return -1;
 
             var rightSum = 0.0;
             var leftSum = 0.0;
@@ -99,7 +101,6 @@ namespace M2.Basic_Coding
                 return index;
             else
                 return GetIndexEqualSum(array, index + 1);
-
         }
 
         /// <summary>
@@ -213,9 +214,9 @@ namespace M2.Basic_Coding
 
         static void Main(string[] args)
         {
-            //var res = InsertNumber(8, 15, 0, 0);
+            var res = InsertNumber(9,13,4,9);
             //var r2 = GetMax(new int[] { 5, 1, -2, 0, 10, 3 }, 0, 5);
-            //var r3 = GetIndexEqualSum(new double[] { 2.4, 0.1, 2, 0.4, 0 }, 0);
+            var r3 = GetIndexEqualSum(new double[0], 0);
             //var r4 = ConcatStringsWithDifSymbols("aslkmf", "stpaz");
             
         }

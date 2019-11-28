@@ -11,6 +11,7 @@ namespace NUnitTests
         [TestCase(8, 15, 0, 0, ExpectedResult = 9)]
         [TestCase(8, 15, 3, 8, ExpectedResult = 120)]
         [TestCase(0, 0, 0, 0, ExpectedResult = 0)]
+        [TestCase(9, 13, 4, 9, ExpectedResult = 217)]
         public int CheckCorrectInsertTest(int firstNum, int secondNum, int i, int j)
         {
             return Program.InsertNumber(firstNum, secondNum, i, j); 
@@ -56,6 +57,16 @@ namespace NUnitTests
         public void CheckCorrectDataTest(int[] array, int num)
         {
             Assert.That(() => Program.FilterDigit(array, num), Throws.TypeOf<ArgumentException>());
+        }
+    }
+
+    [TestFixture]
+    public class GetIndexEqualSumNUnitTests
+    {
+        [TestCase(new double[0], 0, ExpectedResult = -1)]
+        public int CheckCorrectIndexEqualSum(double[] array, int index)
+        {
+            return Program.GetIndexEqualSum(array, index);
         }
     }
 }
