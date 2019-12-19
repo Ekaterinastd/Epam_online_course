@@ -45,10 +45,12 @@ namespace M4.Methods_in_details
             while (fPMant.Length < 7)
                 fPMant.Append(0);
 
-            var mantissa = fPMant + binSPart;
             var exp = 128 - 1 + fPMant.Length;
-            stringNumber.Append(exp);
+            stringNumber.Append(Convert.ToString(exp,2));
+
+            var mantissa = fPMant.ToString() + binSPart;
             stringNumber.Append(mantissa);
+
             return stringNumber.ToString();
         }
     }
