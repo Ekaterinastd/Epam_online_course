@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace M4.Methods_in_details
 {
@@ -12,44 +10,78 @@ namespace M4.Methods_in_details
         {
             var stringNumber = new StringBuilder();
 
-            stringNumber.Append(number > 0 ? "0" : "1");//записываем знак числа
-
-            var part = Math.Abs(number).ToString().Split(',');
-            var firstPart = Convert.ToString(Convert.ToInt32(part[0]),2); //двоичное представление части числа до ,
-            var secondPart = Convert.ToInt32(part[1])*Math.Pow(10,-part[1].Length);
-            var b = 0.5;
-            var sum = 0.0;
-            var degree = 1;
-            var temp = 0.0;
-            var binarySecondPart = new List<byte>();
-            while (true)
+            switch (number)
             {
-                if (Math.Abs(sum - secondPart) < 0.0000000001)
+                case double.MaxValue:
+                    stringNumber.Append("0111111111101111111111111111111111111111111111111111111111111111");
                     break;
-                temp = Math.Pow(b, degree);
-                if (sum + temp <= secondPart)
-                {
-                    sum += temp;
-                    binarySecondPart.Add(1);
-                }
-                else
-                    binarySecondPart.Add(0);
-                degree++;
-            }
-            var binSPart = new StringBuilder();
-            foreach(var s in binarySecondPart)
-                binSPart.Append(s == 0 ? "0" : "1");
+                case double.MinValue:
+                    stringNumber.Append("1111111111101111111111111111111111111111111111111111111111111111");
+                    break;
+                case double.NaN:
+                    stringNumber.Append("1111111111111000000000000000000000000000000000000000000000000000");
+                    break;
+                case double.PositiveInfinity:
+                    stringNumber.Append("0111111111110000000000000000000000000000000000000000000000000000");
+                    break;
+                case double.NegativeInfinity:
+                    stringNumber.Append("1111111111110000000000000000000000000000000000000000000000000000");
+                    break;
+                default:
+                    {
+                        stringNumber.Append(number >= 0 ? "0" : "1");//записываем знак числа
 
-            var fPMant = new StringBuilder();
-            fPMant.Append(firstPart.Substring(firstPart.IndexOf('1') + 1));//какой должна быть длина и как её задать?
-            while (fPMant.Length < 7)
-                fPMant.Append(0);
+                        var part = Math.Abs(number).ToString().Split(',');
+                        var firstPart = Convert.ToString(Convert.ToInt64(part[0]), 2); //двоичное представление части числа до ,
+                        double secondPart = 0;
 
-            var exp = 128 - 1 + fPMant.Length;
-            stringNumber.Append(Convert.ToString(exp,2));
+                        if (part.Length > 1)
+                            secondPart = Convert.ToInt64(part[1]) * Math.Pow(10, -part[1].Length);// часть числа после ,
 
-            var mantissa = fPMant.ToString() + binSPart;
-            stringNumber.Append(mantissa);
+                        var binarySecondPart = new List<double>();
+
+                        if (part.Length > 1)
+                        {
+                            while (true)
+                            {
+                                secondPart = secondPart * 2;
+                                binarySecondPart.Add(Math.Truncate(secondPart));
+                                secondPart = secondPart % 1;
+                                if (secondPart == 0)
+                                {
+                                    binarySecondPart.Add(0);
+                                    break;
+                                }
+                            }
+                        }
+
+                        var expWithOffset = Convert.ToString(firstPart.Length - 1 + 1023, 2);
+                        foreach (var e in expWithOffset)
+                            stringNumber.Append(e);
+                        var mantissa = new string[52];
+                        for (var i = 0; i < firstPart.Length - 1; i++)
+                        {
+                            mantissa[i] = firstPart.Substring(i + 1, 1);
+                        }
+
+                        if (part.Length > 1)
+                        {
+                            for (var i = 0; i < binarySecondPart.Count; i++)
+                            {
+                                if (firstPart.Length - 1 + i == 52)
+                                    break;
+                                else mantissa[firstPart.Length - 1 + i] = Convert.ToString(binarySecondPart[i]);
+                            }
+                        }
+                        foreach (var m in mantissa)
+                        {
+                            if (m == null)
+                                stringNumber.Append(0);
+                            else stringNumber.Append(m);
+                        }
+                        break;
+                    }
+            }            
 
             return stringNumber.ToString();
         }

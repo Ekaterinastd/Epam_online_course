@@ -6,7 +6,7 @@ namespace TestMetods
     [TestFixture]
     public class IEEE754FormatTests
     {
-        [TestCase(185.4375, ExpectedResult = "01000011001110010111000000000000")]
+        [TestCase(185.4375, ExpectedResult = "0100000001100111001011100000000000000000000000000000000000000000")]
         [TestCase(-255.255, ExpectedResult = "1100000001101111111010000010100011110101110000101000111101011100")]
         [TestCase(255.255, ExpectedResult = "0100000001101111111010000010100011110101110000101000111101011100")]
         [TestCase(4294967295.0, ExpectedResult = "0100000111101111111111111111111111111111111000000000000000000000")]
@@ -18,7 +18,7 @@ namespace TestMetods
         [TestCase(double.PositiveInfinity, ExpectedResult = "0111111111110000000000000000000000000000000000000000000000000000")]
         [TestCase(-0.0, ExpectedResult = "1000000000000000000000000000000000000000000000000000000000000000")]
         [TestCase(0.0, ExpectedResult = "0000000000000000000000000000000000000000000000000000000000000000")]
-        public string CheckCorrectInsertTest(double number)
+        public string CheckCorrectTest(double number)
         {
             return DoubleExtension.ToIEEE754Format(number);
         }
