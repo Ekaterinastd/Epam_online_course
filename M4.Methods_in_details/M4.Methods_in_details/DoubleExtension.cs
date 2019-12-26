@@ -6,10 +6,15 @@ namespace M4.Methods_in_details
 {
     public static class DoubleExtension
     {
+        /// <summary>
+        /// Приведение числа с плавающей точкой к формату IEEE754
+        /// </summary>
+        /// <param name="number">Исходное десятичное число</param>
+        /// <returns>Исходное число в формате IEEE754</returns>
         public static string ToIEEE754Format(this double number)
         {
             var stringNumber = new StringBuilder();
-            var sign= Math.Sign(-0.0);
+            var sign = Math.Sign(-0.0);
 
             switch (number)
             {
@@ -85,7 +90,7 @@ namespace M4.Methods_in_details
                         }
                         break;
                     }
-            }            
+            }
 
             return stringNumber.ToString();
         }
