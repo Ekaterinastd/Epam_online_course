@@ -9,6 +9,7 @@ namespace M4.Methods_in_details
         public static string ToIEEE754Format(this double number)
         {
             var stringNumber = new StringBuilder();
+            var sign= Math.Sign(-0.0);
 
             switch (number)
             {
@@ -26,6 +27,9 @@ namespace M4.Methods_in_details
                     break;
                 case double.NegativeInfinity:
                     stringNumber.Append("1111111111110000000000000000000000000000000000000000000000000000");
+                    break;
+                case double.Epsilon:
+                    stringNumber.Append("0000000000000000000000000000000000000000000000000000000000000001");
                     break;
                 default:
                     {
