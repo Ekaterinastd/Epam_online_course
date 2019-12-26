@@ -66,7 +66,7 @@ namespace M4.Methods_in_details
                 else if (a >= b)
                     return GetGCDStein((a - b) / 2, b);
                 else return GetGCDStein(a, (b - a) / 2);
-            }
+            }            
         }
     }
 }

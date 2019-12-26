@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IEEE754FormatTests.cs" />
+    <Compile Include="IsNullTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GCDTests.cs" />
   </ItemGroup>

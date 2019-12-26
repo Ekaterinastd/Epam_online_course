@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="DoubleExtension.cs" />
     <Compile Include="GCD.cs" />
+    <Compile Include="NullableExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

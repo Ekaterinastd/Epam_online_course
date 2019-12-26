@@ -12,6 +12,7 @@ namespace TestMetods
         [TestCase(100, 45, ExpectedResult = 5)]
         [TestCase(0, 15, ExpectedResult = 15)]
         [TestCase(78, 294, 570, 36, ExpectedResult = 6)]
+        [TestCase(78, 294, 0, 36, ExpectedResult = 6)]
         public int CheckEuclideanAlgorithmTest(params int[] numbers)
         {
             return GCD.EuclideanAlgorithm(numbers);
@@ -29,6 +30,7 @@ namespace TestMetods
         [TestCase(100, 45, ExpectedResult = 5)]
         [TestCase(0, 15, ExpectedResult = 15)]
         [TestCase(78, 294, 570, 36, ExpectedResult = 6)]
+        [TestCase(78, 294, 0, 36, ExpectedResult = 6)]
         public int CheckSteinAlgorithmTest(params int[] numbers)
         {
             return GCD.SteinAlgoritm(numbers);
