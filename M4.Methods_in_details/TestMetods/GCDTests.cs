@@ -41,6 +41,6 @@ namespace TestMetods
         public void CheckExceptionSteinAlgorithmTest(params int[] numbers)
         {
             Assert.Throws<ArgumentException>(() => GCD.SteinAlgoritm(numbers));
-        }
+        }       
     }
 }

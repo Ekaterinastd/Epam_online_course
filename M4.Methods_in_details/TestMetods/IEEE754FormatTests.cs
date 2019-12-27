@@ -20,7 +20,7 @@ namespace TestMetods
         [TestCase(0.0, ExpectedResult = "0000000000000000000000000000000000000000000000000000000000000000")]
         public string CheckCorrectTest(double number)
         {
-            return DoubleExtension.ToIEEE754Format(number);
+            return number.ToIEEE754Format();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace M4.Methods_in_details
 {
@@ -15,7 +16,7 @@ namespace M4.Methods_in_details
 
             for (var i = 1; i < numbers.Length; i++)
                 gcd = GetGCDEuclidean(gcd, numbers[i]);
-
+            
             return gcd;
         }
 
@@ -47,8 +48,8 @@ namespace M4.Methods_in_details
         /// <summary>
         /// Вычисление НОД для пары целых чисел по алгоритму Стейна
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
+        /// <param name="a">первое число</param>
+        /// <param name="b">второе число</param>
         /// <returns>НОД двух чисел</returns>
         private static int GetGCDStein(int a, int b)
         {
@@ -67,6 +68,21 @@ namespace M4.Methods_in_details
                     return GetGCDStein((a - b) / 2, b);
                 else return GetGCDStein(a, (b - a) / 2);
             }            
+        }
+
+         /// <summary>
+         /// Время поиска НОД по определённому алгоритму
+         /// </summary>
+         /// <param name="method">Название метода поиска НОД</param>
+         /// <param name="numbers">Входные данные для метода поиска НОД</param>
+         /// <returns>Время</returns>
+        public static long GetRuntime(Func<int[], int> method, params int[] numbers)
+        {
+            var sw = new Stopwatch();
+            sw.Start();
+            method(numbers);
+            sw.Stop();
+            return sw.ElapsedMilliseconds;
         }
     }
 }
