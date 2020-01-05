@@ -18,6 +18,7 @@ namespace TestMetods
         [TestCase(double.PositiveInfinity, ExpectedResult = "0111111111110000000000000000000000000000000000000000000000000000")]
         [TestCase(-0.0, ExpectedResult = "1000000000000000000000000000000000000000000000000000000000000000")]
         [TestCase(0.0, ExpectedResult = "0000000000000000000000000000000000000000000000000000000000000000")]
+        [TestCase(-0.250036, ExpectedResult = "1011111111010000000000001001011011111110101101001010011001100101")]
         public string CheckCorrectTest(double number)
         {
             return number.ToIEEE754Format();

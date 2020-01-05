@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace M4.Methods_in_details
@@ -46,34 +47,23 @@ namespace M4.Methods_in_details
                         var firstPart = Convert.ToString(Convert.ToInt64(parts[0]), 2); // двоичное представление части числа до ,
 
                         var binarySecondPart = GetSecondPart(parts);
+                        var exp =  firstPart.Length - (firstPart + new string(binarySecondPart.Select(x=>(char)(x+'0')).ToArray())).IndexOf('1');
+                        var expWithOffset = Convert.ToString(1023 + exp - 1, 2);
 
-                        var expWithOffset = Convert.ToString(firstPart.Length - 1 + 1023, 2);
+                        while (expWithOffset.Length < 11)
+                            expWithOffset = "0" + expWithOffset;
 
                         foreach (var e in expWithOffset)
                             stringNumber.Append(e);
-                        var mantissa = new string[52];
-                        for (var i = 0; i < firstPart.Length - 1; i++)
-                        {
-                            mantissa[i] = firstPart.Substring(i + 1, 1);
-                        }
 
-                        if (parts.Length > 1)
-                        {
-                            for (var i = 0; i < binarySecondPart.Count; i++)
-                            {
-                                if (firstPart.Length - 1 + i == mantissaLength)
-                                    break;
-                                else mantissa[firstPart.Length - 1 + i] = Convert.ToString(binarySecondPart[i]);
-                            }
-                        }
+                       var mantissa = firstPart + new string(binarySecondPart.Select(x => (char)(x + '0')).ToArray());
 
+                        mantissa = mantissa.TrimStart('0').Substring(1);
+                        while (mantissa.Length < 52)
+                            mantissa += '0';
+                        mantissa = mantissa.Substring(0, 52);
                         foreach (var m in mantissa)
-                        {
-                            if (m == null)
-                                stringNumber.Append(0);
-                            else stringNumber.Append(m);
-                        }
-
+                            stringNumber.Append(m);
                         break;
                     }
             }
