@@ -61,6 +61,10 @@ namespace M2.Basic_Coding
         /// <returns>максимальный элемент</returns>
         public static int GetMax(int[] array, int startInd, int endInd)
         {
+            if (array.Length == 0)
+                throw new ArgumentException("array is empty");
+            if (endInd >= array.Length || startInd < 0)
+                throw new ArgumentException("index out of range");
             if (array.Length == 1)
                 return array[0];
             else
@@ -157,7 +161,7 @@ namespace M2.Basic_Coding
         private static List<int> GetPermutationsList(int num)
         {
             var strNum = num.ToString();
-            biggerNumbersList = new List<int> ();
+            biggerNumbersList = new List<int>();
             RecPermutation(strNum.ToArray(), strNum.Length, num);
             return biggerNumbersList;
         }
@@ -177,9 +181,10 @@ namespace M2.Basic_Coding
                 {
                     numeral[j] = numeral[j - 1];
                 }
+
                 numeral[0] = temp;
                 if (i < n - 1) AddToList(numeral, number);
-                if (n > 0) RecPermutation(numeral, n - 1,number);
+                if (n > 0) RecPermutation(numeral,n - 1,number);
             }
         }
 
@@ -190,7 +195,7 @@ namespace M2.Basic_Coding
         /// <param name="number">исходное число</param>
         private static void AddToList(char[] numeral, int number)
         {
-            var bufer = new StringBuilder("");
+            var bufer = new StringBuilder(string.Empty);
             for (int i = 0; i < numeral.Count(); i++)
             {
                 bufer.Append(numeral[i]);
@@ -215,9 +220,7 @@ namespace M2.Basic_Coding
         static void Main(string[] args)
         {
             var res = InsertNumber(9,13,4,9);
-            //var r2 = GetMax(new int[] { 5, 1, -2, 0, 10, 3 }, 0, 5);
             var r3 = GetIndexEqualSum(new double[0], 0);
-            //var r4 = ConcatStringsWithDifSymbols("aslkmf", "stpaz");
             
         }
     }

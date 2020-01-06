@@ -13,3 +13,18 @@ D:\Катя\Programming\Epam_Online_course\Tasks\M2. Basic Coding\M2. Basic Codi
 D:\Катя\Programming\Epam_Online_course\Tasks\M2. Basic Coding\M2. Basic Coding\bin\Debug\NUnit3.TestAdapter.pdb
 D:\Катя\Programming\Epam_Online_course\Tasks\M2. Basic Coding\M2. Basic Coding\bin\Debug\nunit.engine.dll
 D:\Катя\Programming\Epam_Online_course\Tasks\M2. Basic Coding\M2. Basic Coding\bin\Debug\nunit.engine.api.dll
+D:\Катя\Programming\Epam_Online_course\Tasks\Epam_online_course\M2. Basic Coding\M2. Basic Coding\bin\Debug\NUnit3.TestAdapter.dll
+D:\Катя\Programming\Epam_Online_course\Tasks\Epam_online_course\M2. Basic Coding\M2. Basic Coding\bin\Debug\NUnit3.TestAdapter.pdb
+D:\Катя\Programming\Epam_Online_course\Tasks\Epam_online_course\M2. Basic Coding\M2. Basic Coding\bin\Debug\nunit.engine.dll
+D:\Катя\Programming\Epam_Online_course\Tasks\Epam_online_course\M2. Basic Coding\M2. Basic Coding\bin\Debug\nunit.engine.api.dll
+D:\Катя\Programming\Epam_Online_course\Tasks\Epam_online_course\M2. Basic Coding\M2. Basic Coding\bin\Debug\M2.Basic_Coding.exe.config
+D:\Катя\Programming\Epam_Online_course\Tasks\Epam_online_course\M2. Basic Coding\M2. Basic Coding\bin\Debug\M2.Basic_Coding.exe
+D:\Катя\Programming\Epam_Online_course\Tasks\Epam_online_course\M2. Basic Coding\M2. Basic Coding\bin\Debug\M2.Basic_Coding.pdb
+D:\Катя\Programming\Epam_Online_course\Tasks\Epam_online_course\M2. Basic Coding\M2. Basic Coding\bin\Debug\nunit.framework.dll
+D:\Катя\Programming\Epam_Online_course\Tasks\Epam_online_course\M2. Basic Coding\M2. Basic Coding\bin\Debug\nunit.framework.pdb
+D:\Катя\Programming\Epam_Online_course\Tasks\Epam_online_course\M2. Basic Coding\M2. Basic Coding\bin\Debug\nunit.framework.xml
+D:\Катя\Programming\Epam_Online_course\Tasks\Epam_online_course\M2. Basic Coding\M2. Basic Coding\obj\Debug\M2. Basic Coding.csprojAssemblyReference.cache
+D:\Катя\Programming\Epam_Online_course\Tasks\Epam_online_course\M2. Basic Coding\M2. Basic Coding\obj\Debug\M2. Basic Coding.csproj.CoreCompileInputs.cache
+D:\Катя\Programming\Epam_Online_course\Tasks\Epam_online_course\M2. Basic Coding\M2. Basic Coding\obj\Debug\M2. Basic Coding.csproj.CopyComplete
+D:\Катя\Programming\Epam_Online_course\Tasks\Epam_online_course\M2. Basic Coding\M2. Basic Coding\obj\Debug\M2.Basic_Coding.exe
+D:\Катя\Programming\Epam_Online_course\Tasks\Epam_online_course\M2. Basic Coding\M2. Basic Coding\obj\Debug\M2.Basic_Coding.pdb
