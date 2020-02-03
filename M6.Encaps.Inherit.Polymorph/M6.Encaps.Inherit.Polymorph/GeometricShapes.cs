@@ -20,8 +20,6 @@ namespace M6.Encaps.Inherit.Polymorph
     public class Circle : Figure
     {
         public double Radius { get; private set; }
-        public double X;
-        public double Y;
 
         public Circle(double radius, double x = 0, double y = 0) : base(x, y)
         {
