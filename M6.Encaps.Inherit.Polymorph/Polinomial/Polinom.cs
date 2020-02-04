@@ -28,8 +28,8 @@ namespace Polinomial
             if (Coefficiencts.Count != p.Coefficiencts.Count)
                 return false;
 
-            foreach(var key in Coefficiencts.Keys)
-                if(!p.Coefficiencts.ContainsKey(key))
+            foreach (var key in Coefficiencts.Keys)
+                if (!p.Coefficiencts.ContainsKey(key))
                     return false;
             return true;
         }
@@ -37,6 +37,17 @@ namespace Polinomial
         public override int GetHashCode()
         {
             return -2011244702 + EqualityComparer<Dictionary<int, double>>.Default.GetHashCode(Coefficiencts);
+        }
+
+        private static Polinom RemoveZeroElements(Polinom p)
+        {
+            var count = p.Coefficiencts.Count;
+            for (var i = 0; i < count; i++)
+            {
+                if (p.Coefficiencts.ContainsKey(i) && p.Coefficiencts[i] == 0)
+                    p.Coefficiencts.Remove(i);
+            }
+            return p;
         }
 
         public static Polinom operator +(Polinom p1, Polinom p2)
@@ -78,7 +89,7 @@ namespace Polinomial
                 return p2;
             }
             else if (p1.Coefficiencts.Count != 0 && p2.Coefficiencts.Count == 0)
-                return p1;            
+                return p1;
             else if (p1.Coefficiencts.Count == 0 && p2.Coefficiencts.Count == 0)
                 return p1;
 
@@ -117,19 +128,55 @@ namespace Polinomial
                     if (p3.Coefficiencts.ContainsKey(key1 + key2))
                         p3.Coefficiencts[key1 + key2] += p1.Coefficiencts[key1] * p2.Coefficiencts[key2];
                     else p3.Coefficiencts.Add(key1 + key2, p1.Coefficiencts[key1] * p2.Coefficiencts[key2]);
-               
+
             return RemoveZeroElements(p3);
         }
 
-        private static Polinom RemoveZeroElements(Polinom p)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="p1">Делимое</param>
+        /// <param name="p2">Делитель</param>
+        /// <returns>Частное</returns>
+        public static Polinom operator /(Polinom p1, Polinom p2)
         {
-            var count = p.Coefficiencts.Count;
-            for (var i = 0; i < count; i++)
+            if (p2.Coefficiencts.Count == 0)
+                throw new ArgumentException("division by zero");
+            if (p1.Coefficiencts.Count == 0)
+                return new Polinom() { Coefficiencts = new Dictionary<int, double>() };
+
+            if (p1.Coefficiencts.Keys.Min() < 0 || p2.Coefficiencts.Keys.Min() < 0)
+                throw new ArgumentException("Keys must be positive or zero");
+
+            var listOfKeys = p1.Coefficiencts.Keys.ToList();
+            listOfKeys.Sort();//список ключей, отсортированный по убыванию (должен быть!)
+            listOfKeys.Reverse();
+
+            var res = p1;//результат деления на каждом шаге (после окончания деления это остаток)
+            Polinom quotient = new Polinom() { Coefficiencts = new Dictionary<int, double>() };//частное
+            //quotient.Coefficiencts.Add(p2.Coefficiencts.Keys.Max(), p2.Coefficiencts[p2.Coefficiencts.Keys.Max()]);//первый член частного
+            var key = p1.Coefficiencts.Keys.Max() - p2.Coefficiencts.Keys.Max();
+            var value = p1.Coefficiencts[p1.Coefficiencts.Keys.Max()] / p2.Coefficiencts[p2.Coefficiencts.Keys.Max()];
+            quotient.Coefficiencts.Add(key, value);//первый член частного
+            var subtrahend = quotient * p2;//вычитаемое
+            var tempPol = new Polinom() { Coefficiencts = new Dictionary<int, double>() };//член, который умножаем на делитель
+
+            for (var i = listOfKeys[1]; i >= 0; i--)
             {
-                if (p.Coefficiencts.ContainsKey(i) && p.Coefficiencts[i] == 0)
-                    p.Coefficiencts.Remove(i);
+                res = res - subtrahend;
+                if (res.Coefficiencts.Count == 0 || res.Coefficiencts.Keys.Max() < p2.Coefficiencts.Keys.Max())
+                    break;
+                //res.Coefficiencts.Add(i,p1.Coefficiencts[i]);//сносим следующий член
+                var key1 = res.Coefficiencts.Keys.Max() - p2.Coefficiencts.Keys.Max();
+                var value1 = res.Coefficiencts[res.Coefficiencts.Keys.Max()] / p2.Coefficiencts[p2.Coefficiencts.Keys.Max()];
+                quotient.Coefficiencts.Add(key1, value1);//второй член частного
+                tempPol.Coefficiencts.Add(quotient.Coefficiencts.ElementAt(quotient.Coefficiencts.Count - 1).Key, quotient.Coefficiencts.ElementAt(quotient.Coefficiencts.Count - 1).Value);
+                subtrahend = tempPol * p2;
+                tempPol.Coefficiencts.Clear();
+
             }
-            return p;            
+
+            return RemoveZeroElements(quotient);
         }
     }
 }

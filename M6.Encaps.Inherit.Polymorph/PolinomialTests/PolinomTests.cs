@@ -225,5 +225,78 @@ namespace PolinomialTests
             var p2 = new Polinom() { Coefficiencts = new Dictionary<int, double>() };
             Assert.AreEqual(new Polinom() { Coefficiencts = new Dictionary<int, double>() }, p1 * p2);
         }
+
+        [TestMethod]
+        public void PolinomDivTest1()
+        {
+            var p1 = new Polinom() { Coefficiencts = new Dictionary<int, double> { { 0, 7 }, { 1, -8 }, { 2, 1 } } };
+            var p2 = new Polinom() { Coefficiencts = new Dictionary<int, double> { { 0, -7 }, { 1, 1 } } };
+            Assert.AreEqual(new Polinom() { Coefficiencts = new Dictionary<int, double> { { 0, -1 }, { 1, 1 } } }, p1 / p2);
+        }
+
+        [TestMethod]
+        public void PolinomDivTest2()
+        {
+            var p1 = new Polinom() { Coefficiencts = new Dictionary<int, double> { { 0, 2 }, { 2, -4 }, { 3, 5 } } };
+            var p2 = new Polinom() { Coefficiencts = new Dictionary<int, double> { { 0, 1 }, { 1, 0 }, { 2, 2 } } };
+            Assert.AreEqual(new Polinom() { Coefficiencts = new Dictionary<int, double> { { 0, -2 }, { 1, 2.5 } } }, p1 / p2);
+        }
+
+        [TestMethod]
+        public void PolinomDivTest3()
+        {
+            var p1 = new Polinom() { Coefficiencts = new Dictionary<int, double> { { 4, 2 }, { 5, 2 }, { 6, 1 }, { 7, 1 } } };
+            var p2 = new Polinom() { Coefficiencts = new Dictionary<int, double> { { 2, 1 }, { 3, 1 } } };
+            Assert.AreEqual(new Polinom() { Coefficiencts = new Dictionary<int, double> { { 2, 1 }, { 4, 1 } } }, p1 / p2);
+        }
+
+        [TestMethod]
+        public void PolinomDivTest4()
+        {
+            var p1 = new Polinom() { Coefficiencts = new Dictionary<int, double> { { 0, 2 }, { 1, 0 }, { 2, 3 } } };
+            var p2 = new Polinom() { Coefficiencts = new Dictionary<int, double> { { 0, 2 }, { 2, 0 }, { 3, 5 } } };
+            Assert.AreEqual(new Polinom() { Coefficiencts = new Dictionary<int, double> { { 0, 4 }, { 2, 6 }, { 3, 10 }, { 5, 15 } } }, p1 / p2);
+        }
+
+        [TestMethod]
+        public void PolinomDivTest5()
+        {
+            var p1 = new Polinom() { Coefficiencts = new Dictionary<int, double> { { 0, 0 }, { 1, 0 }, { 2, 0 } } };
+            var p2 = new Polinom() { Coefficiencts = new Dictionary<int, double> { { 0, 2 }, { 2, 4 }, { 3, 5 } } };
+            var res = p1 / p2;
+            Assert.AreEqual(new Polinom() { Coefficiencts = new Dictionary<int, double>() }, res);
+        }
+
+        [TestMethod]
+        public void PolinomDivExceptionTest1()
+        {
+            var p1 = new Polinom() { Coefficiencts = new Dictionary<int, double>() { { 0, 1 }, { -1, 2 }, { 2, 3 } } };
+            var p2 = new Polinom() { Coefficiencts = new Dictionary<int, double>() { { 0, 1 }, { 1, 2 }, { 2, 3 } } };
+            Assert.ThrowsException<ArgumentException>(() => p1 / p2);
+        }
+
+        [TestMethod]
+        public void PolinomDivWithEmptyTest1()
+        {
+            var p1 = new Polinom() { Coefficiencts = new Dictionary<int, double>() };
+            var p2 = new Polinom() { Coefficiencts = new Dictionary<int, double> { { 0, 2 }, { 1, 1 }, { 2, 4 }, { 3, 5 } } };
+            Assert.AreEqual(new Polinom() { Coefficiencts = new Dictionary<int, double>() }, p1 / p2);
+        }
+
+        [TestMethod]
+        public void PolinomDivWithEmptyTest2()
+        {
+            var p1 = new Polinom() { Coefficiencts = new Dictionary<int, double> { { 0, 1 }, { 1, 2 }, { 2, 3 } } };
+            var p2 = new Polinom() { Coefficiencts = new Dictionary<int, double>() };
+            Assert.ThrowsException<ArgumentException>(() => p1 / p2);
+        }
+
+        [TestMethod]
+        public void PolinomDivWithEmptyTest3()
+        {
+            var p1 = new Polinom() { Coefficiencts = new Dictionary<int, double>() };
+            var p2 = new Polinom() { Coefficiencts = new Dictionary<int, double>() };
+            Assert.ThrowsException<ArgumentException>(() => p1 / p2);
+        }
     }
 }
