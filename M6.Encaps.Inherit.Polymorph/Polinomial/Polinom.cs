@@ -147,6 +147,8 @@ namespace Polinomial
 
             if (p1.Coefficiencts.Keys.Min() < 0 || p2.Coefficiencts.Keys.Min() < 0)
                 throw new ArgumentException("Keys must be positive or zero");
+            if (p1.Coefficiencts.Keys.Max() < p2.Coefficiencts.Keys.Max())
+                throw new ArgumentException("The degree of the divisor must be less than or equal to the degree of the dividend");
 
             var listOfKeys = p1.Coefficiencts.Keys.ToList();
             listOfKeys.Sort();//список ключей, отсортированный по убыванию (должен быть!)
@@ -170,11 +172,12 @@ namespace Polinomial
                 var key1 = res.Coefficiencts.Keys.Max() - p2.Coefficiencts.Keys.Max();
                 var value1 = res.Coefficiencts[res.Coefficiencts.Keys.Max()] / p2.Coefficiencts[p2.Coefficiencts.Keys.Max()];
                 quotient.Coefficiencts.Add(key1, value1);//второй член частного
-                tempPol.Coefficiencts.Add(quotient.Coefficiencts.ElementAt(quotient.Coefficiencts.Count - 1).Key, quotient.Coefficiencts.ElementAt(quotient.Coefficiencts.Count - 1).Value);
+                tempPol.Coefficiencts.Add(quotient.Coefficiencts.ElementAt(quotient.Coefficiencts.Count - 1).Key,
+                    quotient.Coefficiencts.ElementAt(quotient.Coefficiencts.Count - 1).Value);
                 subtrahend = tempPol * p2;
                 tempPol.Coefficiencts.Clear();
 
-            }
+            }//добавить вывод и проверку остатка
 
             return RemoveZeroElements(quotient);
         }
