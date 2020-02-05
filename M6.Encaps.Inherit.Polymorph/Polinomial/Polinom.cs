@@ -41,12 +41,12 @@ namespace Polinomial
 
         private static Polinom RemoveZeroElements(Polinom p)
         {
-            var count = p.Coefficiencts.Count;
-            for (var i = 0; i < count; i++)
-            {
-                if (p.Coefficiencts.ContainsKey(i) && p.Coefficiencts[i] == 0)
-                    p.Coefficiencts.Remove(i);
-            }
+            var listOfKeys = p.Coefficiencts.Keys.ToList();
+            listOfKeys.Sort();//список ключей, отсортированный по убыванию 
+            listOfKeys.Reverse();
+            foreach (var k in listOfKeys)
+                if (p.Coefficiencts.ContainsKey(k) && p.Coefficiencts[k] == 0)
+                    p.Coefficiencts.Remove(k);
             return p;
         }
 
@@ -138,12 +138,13 @@ namespace Polinomial
         /// <param name="p1">Делимое</param>
         /// <param name="p2">Делитель</param>
         /// <returns>Частное</returns>
-        public static Polinom operator /(Polinom p1, Polinom p2)
+        public static Tuple<Polinom,Polinom> operator /(Polinom p1, Polinom p2)
         {
             if (p2.Coefficiencts.Count == 0)
                 throw new ArgumentException("division by zero");
             if (p1.Coefficiencts.Count == 0)
-                return new Polinom() { Coefficiencts = new Dictionary<int, double>() };
+                return new Tuple<Polinom, Polinom>(new Polinom() { Coefficiencts = new Dictionary<int, double>() },
+                    new Polinom() { Coefficiencts = new Dictionary<int, double>() });
 
             if (p1.Coefficiencts.Keys.Min() < 0 || p2.Coefficiencts.Keys.Min() < 0)
                 throw new ArgumentException("Keys must be positive or zero");
@@ -151,12 +152,11 @@ namespace Polinomial
                 throw new ArgumentException("The degree of the divisor must be less than or equal to the degree of the dividend");
 
             var listOfKeys = p1.Coefficiencts.Keys.ToList();
-            listOfKeys.Sort();//список ключей, отсортированный по убыванию (должен быть!)
+            listOfKeys.Sort();//список ключей, отсортированный по убыванию
             listOfKeys.Reverse();
 
-            var res = p1;//результат деления на каждом шаге (после окончания деления это остаток)
+            var remainder = p1;//результат деления на каждом шаге (после окончания деления это остаток)
             Polinom quotient = new Polinom() { Coefficiencts = new Dictionary<int, double>() };//частное
-            //quotient.Coefficiencts.Add(p2.Coefficiencts.Keys.Max(), p2.Coefficiencts[p2.Coefficiencts.Keys.Max()]);//первый член частного
             var key = p1.Coefficiencts.Keys.Max() - p2.Coefficiencts.Keys.Max();
             var value = p1.Coefficiencts[p1.Coefficiencts.Keys.Max()] / p2.Coefficiencts[p2.Coefficiencts.Keys.Max()];
             quotient.Coefficiencts.Add(key, value);//первый член частного
@@ -165,21 +165,23 @@ namespace Polinomial
 
             for (var i = listOfKeys[1]; i >= 0; i--)
             {
-                res = res - subtrahend;
-                if (res.Coefficiencts.Count == 0 || res.Coefficiencts.Keys.Max() < p2.Coefficiencts.Keys.Max())
+                remainder = remainder - subtrahend;
+                remainder = RemoveZeroElements(remainder);
+                if (remainder.Coefficiencts.Count == 0 || remainder.Coefficiencts.Keys.Max() < p2.Coefficiencts.Keys.Max())
                     break;
-                //res.Coefficiencts.Add(i,p1.Coefficiencts[i]);//сносим следующий член
-                var key1 = res.Coefficiencts.Keys.Max() - p2.Coefficiencts.Keys.Max();
-                var value1 = res.Coefficiencts[res.Coefficiencts.Keys.Max()] / p2.Coefficiencts[p2.Coefficiencts.Keys.Max()];
+                var key1 = remainder.Coefficiencts.Keys.Max() - p2.Coefficiencts.Keys.Max();
+                var value1 = remainder.Coefficiencts[remainder.Coefficiencts.Keys.Max()] / p2.Coefficiencts[p2.Coefficiencts.Keys.Max()];
                 quotient.Coefficiencts.Add(key1, value1);//второй член частного
                 tempPol.Coefficiencts.Add(quotient.Coefficiencts.ElementAt(quotient.Coefficiencts.Count - 1).Key,
                     quotient.Coefficiencts.ElementAt(quotient.Coefficiencts.Count - 1).Value);
                 subtrahend = tempPol * p2;
                 tempPol.Coefficiencts.Clear();
 
-            }//добавить вывод и проверку остатка
+            }
 
-            return RemoveZeroElements(quotient);
+            quotient = RemoveZeroElements(quotient);
+            remainder = RemoveZeroElements(remainder);
+            return new Tuple<Polinom, Polinom> (quotient, remainder);           
         }
     }
 }
