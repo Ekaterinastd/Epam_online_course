@@ -9,7 +9,7 @@ namespace TestMethods
         [TestCase("a clash of KINGS", "a an the of", ExpectedResult = "A Clash of Kings")]
         [TestCase("THE WIND IN THE WILLOWS", "The In", ExpectedResult = "The Wind in the Willows")]
         [TestCase("the quick bRown fox", ExpectedResult = "The Quick Brown Fox")]
-        public string TitileCaseTest(string input, string minorWords)
+        public string TitileCaseTest(string input, string minorWords="")
         {
             return TitleCase.GetTitle(input, minorWords);
         }
