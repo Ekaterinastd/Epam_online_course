@@ -1,21 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace M7.Framework_Fundamentals
 {
-    class UniqueInOrder
+    public static class UniqueInOrder
     {
-        //public string GetUniqueInOrder<T>(T input)
-        //{
-        //    var listOfSymbols = input.;
-        //    var count = listOfSymbols.Count;
-        //    for (var i = 0; i < count - 1; i++)
-        //        if (listOfSymbols[i] == listOfSymbols[i + 1])
-        //            listOfSymbols.RemoveAt(i + 1);
-        //    return listOfSymbols.ToString();
-        //}
+        public static new List<T> GetUniqueInOrder<T>(IEnumerable<T> input)
+        {
+            var listOfSymbols = new List<T>();
+            T buff = default (T);
+            foreach(var symb in input)
+            {
+                if (!buff.Equals(symb))
+                    listOfSymbols.Add(symb);
+                buff = symb;
+            }
+            return listOfSymbols;
+        }
     }
 }
