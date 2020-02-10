@@ -5,6 +5,9 @@ namespace M4.Methods_in_details
 {
     public class GCD
     {
+        static Func<int, int, int> Algorithm = GetGCDEuclidean;
+
+
         /// <summary>
         /// Вычисление НОД по алгоритму Евклида для двух, трех и т.д. целых чисел
         /// </summary>
@@ -15,8 +18,8 @@ namespace M4.Methods_in_details
             int gcd = numbers[0];
 
             for (var i = 1; i < numbers.Length; i++)
-                gcd = GetGCDEuclidean(gcd, numbers[i]);
-            
+                gcd = Algorithm(gcd, numbers[i]);
+
             return gcd;
         }
 
@@ -27,20 +30,21 @@ namespace M4.Methods_in_details
         /// <param name="b"></param>
         /// <returns>НОД двух чисел</returns>
         private static int GetGCDEuclidean(int a, int b)
-        {
+        {            
             if (a == 0 && b == 0)
                 throw new ArgumentException();
             if (b == 0)
                 return Math.Abs(a);
-            return GetGCDEuclidean(b, a % b);
+            return Algorithm(b, a % b);
         }
 
         public static int SteinAlgoritm(params int[] numbers)
         {
             int gcd = numbers[0];
+            Algorithm = GetGCDStein;
 
             for (var i = 1; i < numbers.Length; i++)
-                gcd = GetGCDEuclidean(gcd, numbers[i]);
+                gcd = Algorithm(gcd, numbers[i]);
 
             return gcd;
         }
@@ -58,15 +62,15 @@ namespace M4.Methods_in_details
 
             if (a % 2 == 0)
                 if (b % 2 == 0)
-                    return GetGCDStein(a / 2, b / 2) * 2;
-                else return GetGCDStein(a / 2, b);
+                    return Algorithm(a / 2, b / 2) * 2;
+                else return Algorithm(a / 2, b);
             else
             {
                 if (b % 2 == 0)
-                    return GetGCDStein(a, b / 2);
+                    return Algorithm(a, b / 2);
                 else if (a >= b)
-                    return GetGCDStein((a - b) / 2, b);
-                else return GetGCDStein(a, (b - a) / 2);
+                    return Algorithm((a - b) / 2, b);
+                else return Algorithm(a, (b - a) / 2);
             }            
         }
 
