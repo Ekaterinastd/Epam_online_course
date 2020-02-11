@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BubbleSort.cs" />
     <Compile Include="GeometricShapes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

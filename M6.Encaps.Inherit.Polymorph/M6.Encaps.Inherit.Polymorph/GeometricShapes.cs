@@ -4,13 +4,9 @@ namespace M6.Encaps.Inherit.Polymorph
 {
     public abstract class Figure
     {
-        public double X;
-        public double Y;
-
-        public Figure(double x = 0, double y = 0)
+        public Figure()
         {
-            X = x;
-            Y = y;
+
         }
 
         public abstract double GetPerimeter();
@@ -21,7 +17,7 @@ namespace M6.Encaps.Inherit.Polymorph
     {
         public double Radius { get; private set; }
 
-        public Circle(double radius, double x = 0, double y = 0) : base(x, y)
+        public Circle(double radius)
         {
             if (radius < 0)
                 throw new ArgumentException("Radius must be positive");
@@ -45,7 +41,7 @@ namespace M6.Encaps.Inherit.Polymorph
         public double B { get; private set; }
         public double C { get; private set; }
 
-        public Triangle(double a, double b, double c, double x = 0, double y = 0) : base(x, y)
+        public Triangle(double a, double b, double c)
         {
             A = a;
             B = b;
@@ -76,7 +72,7 @@ namespace M6.Encaps.Inherit.Polymorph
         public double Height { get; private set; }
         public double Width { get; private set; }
 
-        public Rectangle(double height, double width, double x = 0, double y = 0) : base(x, y)
+        public Rectangle(double height, double width)
         {
             if (height <= 0 || width <= 0)
                 throw new ArgumentException("Height and width must be positive");
@@ -97,7 +93,7 @@ namespace M6.Encaps.Inherit.Polymorph
 
     public class Square : Rectangle
     {
-        public Square(double height, double width, double x = 0, double y = 0) : base(height, width, x, y)
+        public Square(double height, double width) : base(height, width)
         {
 
         }

@@ -10,6 +10,14 @@ namespace PolinomialTests
     public class PolinomTests
     {
         [TestMethod]
+        public void PolinomEqualsTest()
+        {
+            var p1 = new Polinom() { Coefficiencts = new Dictionary<int, double> { { 1, 12 }, { 13, 24 } } };
+            var p2 = new Polinom() { Coefficiencts = new Dictionary<int, double> { { 1, 12 }, { 13, 24 }, { 43, 0 } } };
+            Assert.AreEqual(true, p1.Equals(p2));
+        }
+
+        [TestMethod]
         public void PolinomSumTest1()
         {
             var p1 = new Polinom() { Coefficiencts = new Dictionary<int, double> { { 0, 1 }, { 1, 2 }, { 2, 3 } } };

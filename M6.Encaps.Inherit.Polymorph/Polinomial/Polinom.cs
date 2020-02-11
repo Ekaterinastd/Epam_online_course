@@ -25,6 +25,8 @@ namespace Polinomial
             Polinom p = obj as Polinom;
             if (p as Polinom == null)
                 return false;
+            RemoveZeroElements(p);
+            RemoveZeroElements(this);
             if (Coefficiencts.Count != p.Coefficiencts.Count)
                 return false;
 
@@ -50,6 +52,15 @@ namespace Polinomial
             return p;
         }
 
+        public static bool operator ==(Polinom p1, Polinom p2)
+        {
+            return p1.Equals(p2);
+        }
+
+        public static bool operator !=(Polinom p1, Polinom p2)
+        {
+            return !p1.Equals(p2);
+        }
         public static Polinom operator +(Polinom p1, Polinom p2)
         {
             if (p1.Coefficiencts.Count == 0 && p2.Coefficiencts.Count != 0)
