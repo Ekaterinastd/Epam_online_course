@@ -32,9 +32,10 @@ namespace M7.Framework_Fundamentals
                         {
                             result.Append(pair[0] + '=' + paramPair[1]);
                         }
-                        result.Append(pair[0] + '=' + pair[1]);
+                        else result.Append(kv);
                         result.Append('&');
                     }
+                    result.Remove(result.Length - 1,1);
                 }
                 else
                 {
