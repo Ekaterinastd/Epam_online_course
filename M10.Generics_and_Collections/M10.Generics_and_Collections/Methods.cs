@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -79,6 +80,20 @@ namespace M10.Generics_and_Collections
 
     public class FibonacciNumbers
     {
-
+        public static IEnumerable<int> GetFibonacciNumbers()
+        {            
+            var n0 = 0;
+            var n1 = 1;
+            yield return n0;
+            yield return n1;
+            var res = 0;
+            while (true)
+            {
+                res = n0 + n1;
+                yield return res;
+                n0 = n1;
+                n1 = res;
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using M10.Generics_and_Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TestMethods
 {
@@ -41,7 +42,7 @@ namespace TestMethods
         [TestMethod]
         public void TestMethod6()
         {
-            Assert.AreEqual(BinarySearch.BinarySearchGeneric(new int [] { 1, 2, 3, 4, 6, 7, 8 }, 5), -1);
+            Assert.AreEqual(BinarySearch.BinarySearchGeneric(new int[] { 1, 2, 3, 4, 6, 7, 8 }, 5), -1);
         }
     }
 
@@ -51,7 +52,7 @@ namespace TestMethods
         [TestMethod]
         public void TestMethod1()
         {
-            CollectionAssert.AreEqual(WordsFrequency.GetWordsFrequency("AA z d v sd aa sd c z aa c"),new Dictionary<string, double>() { ["aa"] = 3.0 / 11, ["z"] = 2.0 / 11,["d"] = 1.0 / 11, ["v"] = 1.0 / 11, ["sd"] = 2.0 / 11, ["c"] = 2.0 / 11 });
+            CollectionAssert.AreEqual(WordsFrequency.GetWordsFrequency("AA z d v sd aa sd c z aa c"), new Dictionary<string, double>() { ["aa"] = 3.0 / 11, ["z"] = 2.0 / 11, ["d"] = 1.0 / 11, ["v"] = 1.0 / 11, ["sd"] = 2.0 / 11, ["c"] = 2.0 / 11 });
         }
 
         [TestMethod]
@@ -73,7 +74,7 @@ namespace TestMethods
         [TestMethod]
         public void TestMethod1()
         {
-            Assert.AreEqual(ReversePolishNotation.GetReversePolishNotation("5 1 2 + 4 * + 3 -"),14);
+            Assert.AreEqual(ReversePolishNotation.GetReversePolishNotation("5 1 2 + 4 * + 3 -"), 14);
         }
 
         [TestMethod]
@@ -94,4 +95,16 @@ namespace TestMethods
             Assert.AreEqual(ReversePolishNotation.GetReversePolishNotation(" "), 0);
         }
     }
- }
+
+    [TestClass]
+    public class FibonacciNumbersTest
+    {
+        [TestMethod]
+        public void TestMethod1() => CollectionAssert.AreEqual(FibonacciNumbers.GetFibonacciNumbers().Take(7).ToArray(),
+            new int[] { 0, 1, 1, 2, 3, 5, 8 });
+
+        [TestMethod]
+        public void TestMethod2() => CollectionAssert.AreEqual(FibonacciNumbers.GetFibonacciNumbers().Skip(10).Take(10).ToArray(),
+            new int[] { 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181 });
+    }
+}
