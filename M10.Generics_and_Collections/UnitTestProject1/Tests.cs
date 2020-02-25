@@ -107,4 +107,50 @@ namespace TestMethods
         public void TestMethod2() => CollectionAssert.AreEqual(FibonacciNumbers.GetFibonacciNumbers().Skip(10).Take(10).ToArray(),
             new int[] { 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181 });
     }
+
+    [TestClass]
+    public class QueueTests
+    {
+        [TestMethod]
+        public void EnqueueTest()
+        {
+            var queue = new M10.Generics_and_Collections.Queue<int>();
+            queue.Enqueue(1);
+            queue.Enqueue(2);
+            queue.Enqueue(3);
+            CollectionAssert.AreEqual(new int[] {1, 2, 3 }, queue.ToArray());
+        }
+
+        [TestMethod]
+        public void EnqueueDequeueTest()
+        {
+            var queue = new M10.Generics_and_Collections.Queue<int>();
+            queue.Enqueue(1);
+            queue.Enqueue(2);
+            queue.Enqueue(3);
+            queue.Dequeue();
+            CollectionAssert.AreEqual(new int[] { 2, 3 }, queue.ToArray());
+        }
+
+        [TestMethod]
+        public void EmptyQueueTest()
+        {
+            var queue = new M10.Generics_and_Collections.Queue<int>();
+            queue.Enqueue(1);
+            queue.Enqueue(2);
+            queue.Enqueue(3);
+            queue.Dequeue();
+            queue.Dequeue();
+            queue.Dequeue();
+            CollectionAssert.AreEqual(new int[0], queue.ToArray());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestException()
+        {
+            var queue = new M10.Generics_and_Collections.Queue<int>();
+            queue.Dequeue();
+        }
+    }
 }

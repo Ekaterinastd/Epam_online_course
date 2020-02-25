@@ -34,14 +34,14 @@ namespace M10.Generics_and_Collections
     {
         public static Dictionary<string, double> GetWordsFrequency(string text)
         {
-            var words = text.ToLower().Split(new char[] { '.', '?', '!', ',', ':', ';', ' ' },StringSplitOptions.RemoveEmptyEntries);
+            var words = text.ToLower().Split(new char[] { '.', '?', '!', ',', ':', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries);
             if (words.Length == 0)
                 throw new ArgumentException("String is empty");
 
             var frequency = new Dictionary<string, double>();
 
-            foreach(var word in words)
-            {                
+            foreach (var word in words)
+            {
                 if (!frequency.ContainsKey(word))
                     frequency.Add(word, 1.0 / words.Length);
                 else frequency[word] += 1.0 / words.Length;
@@ -53,7 +53,7 @@ namespace M10.Generics_and_Collections
     public class ReversePolishNotation
     {
         public static int GetReversePolishNotation(string str)
-        {            
+        {
             var operations = new Dictionary<string, Func<int, int, int>>();
             operations.Add("+", (y, x) => x + y);
             operations.Add("-", (y, x) => x - y);
@@ -62,7 +62,7 @@ namespace M10.Generics_and_Collections
 
             var stack = new Stack<int>();
 
-            var list = str.Split(new char[] { ' ' },StringSplitOptions.RemoveEmptyEntries);
+            var list = str.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             if (list.Length == 0)
                 return 0;
             var res = 0;
@@ -81,7 +81,7 @@ namespace M10.Generics_and_Collections
     public class FibonacciNumbers
     {
         public static IEnumerable<int> GetFibonacciNumbers()
-        {            
+        {
             var n0 = 0;
             var n1 = 1;
             yield return n0;
@@ -94,6 +94,64 @@ namespace M10.Generics_and_Collections
                 n0 = n1;
                 n1 = res;
             }
+        }
+    }
+
+    public class Queue<T> : IEnumerable<T>
+    {
+        public class QueueItem<T>
+        {
+            public T Value { get; set; }
+            public QueueItem<T> Next { get; set; }
+        }
+
+        public QueueItem<T> Head { get; private set; }
+        QueueItem<T> tail;
+        public bool IsEmpty { get { return Head == null; } }
+
+        /// <summary>
+        /// Добавление элемента в очередь
+        /// </summary>
+        /// <param name="value">элемент</param>
+        public void Enqueue(T value)
+        {
+            if (IsEmpty)
+                tail = Head = new QueueItem<T> { Value = value, Next = null };
+            else
+            {
+                var item = new QueueItem<T> { Value = value, Next = null };
+                tail.Next = item;
+                tail = item;
+            }
+        }
+
+        /// <summary>
+        /// Удаление элемента из очереди
+        /// </summary>
+        /// <returns>очередь без удалённого элемента</returns>
+        public T Dequeue()
+        {
+            if (Head == null) throw new InvalidOperationException();
+            var result = Head.Value;
+            Head = Head.Next;
+            if (Head == null)
+                tail = null;
+            return result;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            var current = Head;
+            while (current != null)
+            {
+                yield return current.Value;
+                current = current.Next;
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }
