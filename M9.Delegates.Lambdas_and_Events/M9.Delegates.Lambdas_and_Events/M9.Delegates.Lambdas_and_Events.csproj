@@ -53,6 +53,7 @@
     <Compile Include="BubbleSort_with_delegates.cs" />
     <Compile Include="Countdown.cs" />
     <Compile Include="GCD with delegates.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
