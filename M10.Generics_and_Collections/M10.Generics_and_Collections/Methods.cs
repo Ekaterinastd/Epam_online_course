@@ -154,4 +154,166 @@ namespace M10.Generics_and_Collections
             return GetEnumerator();
         }
     }
+
+    public class Stack<T> : IEnumerable<T>
+    {
+        public class StackItem<T>
+        {
+            public T Value { get; set; }
+            public StackItem<T> Next { get; set; }
+        }
+
+        public StackItem<T> Head { get; private set; }
+        StackItem<T> tail;
+        public bool IsEmpty { get { return Head == null; } }
+
+        /// <summary>
+        /// Добавление элемента в стек
+        /// </summary>
+        /// <param name="value">элемент</param>
+        public void Push(T value)
+        {
+            if (IsEmpty)
+                tail = Head = new StackItem<T> { Value = value, Next = null };
+            else
+            {
+                var item = new StackItem<T> { Value = value, Next = Head };
+                Head = item;
+            }
+        }
+
+        /// <summary>
+        /// Удаление элемента из стека
+        /// </summary>
+        /// <returns>очередь без удалённого элемента</returns>
+        public T Pop()
+        {
+            if (Head == null) throw new InvalidOperationException();
+            var result = Head.Value;
+            Head = Head.Next;
+            if (Head == null)
+                tail = null;
+            return result;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            var current = Head;
+            while (current != null)
+            {
+                yield return current.Value;
+                current = current.Next;
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+    }
+
+    public class Set<T> : IEnumerable<T>
+    {
+        public List<T> _Set = new List<T>();
+
+        /// <summary>
+        /// Добавление элемента в множество
+        /// </summary>
+        /// <param name="value">элемент</param>
+        public void Add(T value)
+        {
+            if (value == null)
+                throw new ArgumentNullException();
+            else if(_Set.Count==0)
+                _Set.Add(value);
+            else if (!_Set.Contains(value))
+                _Set.Add(value);
+            else throw new InvalidOperationException("This element is already in the set");
+        }
+
+        /// <summary>
+        /// Удаление элемента из множества
+        /// </summary>
+        /// <param name="value">элемент</param>
+        public void Remove(T value)
+        {
+            if (value == null)
+                throw new ArgumentNullException();
+            if (_Set.Contains(value))
+                _Set.Remove(value);
+            else throw new InvalidOperationException("The set doesn't contains this element");
+        }
+
+        /// <summary>
+        /// Объединение множеств
+        /// </summary>
+        /// <param name="A">Первое множество</param>
+        /// <param name="B">Второе множество</param>
+        /// <returns>Новое множество</returns>
+        public Set<T> Union(Set<T> A, Set<T> B)
+        {
+            foreach (var element in B)
+                if (!A.Contains(element))
+                    A.Add(element);
+            return A;
+        }
+
+        /// <summary>
+        /// Разность множеств
+        /// </summary>
+        /// <param name="A">Первое множество</param>
+        /// <param name="B">Второе множество</param>
+        /// <returns>Новое множество</returns>
+        public Set<T> Difference(Set<T> A, Set<T> B)
+        {
+            var result = new Set<T>();
+            foreach (var element in A)
+                if (!B.Contains(element))
+                    result.Add(element);
+            foreach (var element in B)
+                if (!A.Contains(element))
+                    result.Add(element);
+            return result;
+        }
+
+        /// <summary>
+        /// Пересечение множеств
+        /// </summary>
+        /// <param name="A">Первое множество</param>
+        /// <param name="B">Второе множество</param>
+        /// <returns>Новое множество</returns>
+        public Set<T> Intersection(Set<T> A, Set<T> B)
+        {
+            var result = new Set<T>();
+            foreach (var element in A)
+                if (B.Contains(element))
+                    result.Add(element);
+            return result;
+        }
+
+        /// <summary>
+        /// Проверка на подмножество (наличие всех элементов В в множестве А)
+        /// </summary>
+        /// <param name="A">главное множество</param>
+        /// <param name="B">проверяемое подмножество</param>
+        /// <returns></returns>
+        public bool Subset(Set<T> A, Set<T> B)
+        {
+            foreach (var element in B)
+                if (!A.Contains(element))
+                    return false;
+            return true;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            foreach (var element in _Set)
+                yield return element;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+    }
 }

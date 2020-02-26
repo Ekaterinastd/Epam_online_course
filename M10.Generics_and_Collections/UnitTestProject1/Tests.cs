@@ -118,7 +118,7 @@ namespace TestMethods
             queue.Enqueue(1);
             queue.Enqueue(2);
             queue.Enqueue(3);
-            CollectionAssert.AreEqual(new int[] {1, 2, 3 }, queue.ToArray());
+            CollectionAssert.AreEqual(new int[] { 1, 2, 3 }, queue.ToArray());
         }
 
         [TestMethod]
@@ -151,6 +151,198 @@ namespace TestMethods
         {
             var queue = new M10.Generics_and_Collections.Queue<int>();
             queue.Dequeue();
+        }
+    }
+
+    [TestClass]
+    public class StackTests
+    {
+        [TestMethod]
+        public void EnqueueTest()
+        {
+            var stack = new M10.Generics_and_Collections.Stack<int>();
+            stack.Push(1);
+            stack.Push(2);
+            stack.Push(3);
+            CollectionAssert.AreEqual(new int[] { 3, 2, 1 }, stack.ToArray());
+        }
+
+        [TestMethod]
+        public void EnqueueDequeueTest()
+        {
+            var stack = new M10.Generics_and_Collections.Stack<int>();
+            stack.Push(1);
+            stack.Push(2);
+            stack.Push(3);
+            stack.Pop();
+            CollectionAssert.AreEqual(new int[] { 2, 1 }, stack.ToArray());
+        }
+
+        [TestMethod]
+        public void EmptyQueueTest()
+        {
+            var stack = new M10.Generics_and_Collections.Stack<int>();
+            stack.Push(1);
+            stack.Push(2);
+            stack.Push(3);
+            stack.Pop();
+            stack.Pop();
+            stack.Pop();
+            CollectionAssert.AreEqual(new int[0], stack.ToArray());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestException()
+        {
+            var stack = new M10.Generics_and_Collections.Stack<int>();
+            stack.Pop();
+        }
+    }
+
+    [TestClass]
+    public class SetTests
+    {
+        [TestMethod]
+        public void AddElementsTest()
+        {
+            var set = new Set<int[]>() { _Set = new List<int[]>() };
+            var arr1 = new int[] { 1, 2, 3 };
+            var arr2 = new int[] { 10, 20, 30 };
+            set.Add(arr1);
+            set.Add(arr2);
+            CollectionAssert.AreEqual(new List<int[]> { arr1, arr2 }, set.ToList());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void AddSameElementsTest()
+        {
+            var set = new Set<int[]>() { _Set = new List<int[]>() };
+            var arr1 = new int[] { 1, 2, 3 };
+            set.Add(arr1);
+            set.Add(arr1);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void AddEmptyTest()
+        {
+            var set = new Set<int[]>() { _Set = new List<int[]>() };
+            set.Add(null);
+        }
+
+        [TestMethod]
+        public void RemoveElementsTest()
+        {
+            var set = new Set<int[]>() { _Set = new List<int[]>() };
+            var arr1 = new int[] { 1, 2, 3, 4 };
+            var arr2 = new int[] { 10, 20, 30 };
+            set.Add(arr1);
+            set.Add(arr2);
+            set.Remove(arr1);
+            CollectionAssert.AreEqual(new List<int[]> { arr2 }, set.ToList());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void RemoveElementsExceptionTest()
+        {
+            var set = new Set<int[]>() { _Set = new List<int[]>() };
+            var arr1 = new int[] { 1, 2, 3, 4 };
+            var arr2 = new int[] { 10, 20, 30 };
+            var arr3 = new int[] { 9 };
+            set.Add(arr1);
+            set.Add(arr2);
+            set.Remove(arr3);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void RemoveElementsTest2()
+        {
+            var set = new Set<int[]>() { _Set = new List<int[]>() };
+            var arr1 = new int[] { 1, 2, 3, 4 };
+            var arr2 = new int[] { 10, 20, 30 };
+            set.Add(arr2);
+            set.Remove(arr1);
+        }
+
+        [TestMethod]
+        public void UnionElementsTest()
+        {
+            var arr1 = new int[] { 1, 2, 3, 4 };
+            var arr2 = new int[] { 10, 20, 30 };
+            var arr3 = new int[] { 100 };
+            var set1 = new Set<int[]>() { _Set = new List<int[]>() { arr1, arr2 } };
+            var set2 = new Set<int[]>() { _Set = new List<int[]>() { arr2, arr3 } };            
+            CollectionAssert.AreEqual(new List<int[]> { arr1, arr2, arr3 }, set1.Union(set1,set2).ToList());
+        }
+
+        [TestMethod]
+        public void DifferenceElementsTest1()
+        {
+            var arr1 = new int[] { 1, 2, 3, 4 };
+            var arr2 = new int[] { 10, 20, 30 };
+            var arr3 = new int[] { 100 };
+            var set1 = new Set<int[]>() { _Set = new List<int[]>() { arr1, arr2 } };
+            var set2 = new Set<int[]>() { _Set = new List<int[]>() { arr2, arr3 } };
+            CollectionAssert.AreEqual(new List<int[]> { arr1, arr3 }, set1.Difference(set1, set2).ToList());
+        }
+
+        [TestMethod]
+        public void DifferenceElementsTest2()
+        {
+            var arr1 = new int[] { 1, 2, 3, 4 };
+            var arr2 = new int[] { 10, 20, 30 };
+            var set1 = new Set<int[]>() { _Set = new List<int[]>() { arr1, arr2 } };
+            var set2 = new Set<int[]>() { _Set = new List<int[]>() { arr2, arr1 } };
+            CollectionAssert.AreEqual(new List<int[]> { }, set1.Difference(set1, set2).ToList());
+        }
+
+        [TestMethod]
+        public void IntersectionElementsTest()
+        {
+            var arr1 = new int[] { 1, 2, 3, 4 };
+            var arr2 = new int[] { 10, 20, 30 };
+            var arr3 = new int[] { 100 };
+            var set1 = new Set<int[]>() { _Set = new List<int[]>() { arr1, arr2 } };
+            var set2 = new Set<int[]>() { _Set = new List<int[]>() { arr3, arr1 } };
+            CollectionAssert.AreEqual(new List<int[]> { arr1 }, set1.Intersection(set1, set2).ToList());
+        }
+
+        [TestMethod]
+        public void IntersectionElementsTest2()
+        {
+            var arr1 = new int[] { 1, 2, 3, 4 };
+            var arr2 = new int[] { 10, 20, 30 };
+            var arr3 = new int[] { 100 };
+            var set1 = new Set<int[]>() { _Set = new List<int[]>() { arr1, arr2 } };
+            var set2 = new Set<int[]>() { _Set = new List<int[]>() { arr3 } };
+            CollectionAssert.AreEqual(new List<int[]> { }, set1.Intersection(set1, set2).ToList());
+        }
+
+        [TestMethod]
+        public void SubsetElementsTest()
+        {
+            var arr1 = new int[] { 1, 2, 3, 4 };
+            var arr2 = new int[] { 10, 20, 30 };
+            var arr3 = new int[] { 100 };
+            var set1 = new Set<int[]>() { _Set = new List<int[]>() { arr1, arr2, arr3 } };
+            var set2 = new Set<int[]>() { _Set = new List<int[]>() { arr3 } };
+            Assert.AreEqual(true, set1.Subset(set1, set2));
+        }
+
+        [TestMethod]
+        public void SubsetElementsTest2()
+        {
+            var arr1 = new int[] { 1, 2, 3, 4 };
+            var arr2 = new int[] { 10, 20, 30 };
+            var arr3 = new int[] { 100 };
+            var arr4 = new int[] { 9, 9 };
+            var set1 = new Set<int[]>() { _Set = new List<int[]>() { arr1, arr2, arr4 } };
+            var set2 = new Set<int[]>() { _Set = new List<int[]>() { arr3, arr4 } };
+            Assert.AreEqual(false, set1.Subset(set1, set2));
         }
     }
 }
