@@ -12,21 +12,21 @@ namespace M10.Generics_and_Collections
         {
             if (comparator == null)
             {
-                var flag = false;
+                var interfaceFound = false;
                 foreach (var iface in typeof(T).GetInterfaces())
                     if (iface == typeof(IComparable))
-                        flag = true;
-                if (!flag)
+                        interfaceFound = true;
+                if (!interfaceFound)
                     throw new ArgumentException();
                 else
                     comparator = new Func<T, T, int>((t1, t2) => (t1 as IComparable).CompareTo(t2 as IComparable));
             }
-
             Comparator = comparator;
         }
 
         public int Count { get; private set; }
         public Func<T, T, int> Comparator { get; private set; }
+
         public IEnumerator<T> GetEnumerator()
         {
             return InOrderTraversal() as IEnumerator<T>;
@@ -104,41 +104,6 @@ namespace M10.Generics_and_Collections
             }
         }
 
-        public IEnumerable<T> PostOrderTraversal2()
-        {
-            if (Head != null)
-            {
-                var stack = new Stack<Node<T>>();
-                var current = Head;
-                var goLeftNext = true;
-                stack.Push(current);
-
-                while (stack.Count > 0)
-                {
-                    while (current.Left != null && goLeftNext)
-                    {
-                        stack.Push(current);
-                        current = current.Left;
-                    }
-
-                    yield return current.Value;
-                    current = stack.Pop();
-
-                    if (current.Right != null)
-                    {
-                        current = current.Right;
-                        stack.Push(current);
-                        goLeftNext = false;
-                    }
-                    else
-                    {
-                        current = stack.Pop();
-                        //goLeftNext = true;
-                    }
-                }
-            }
-        }
-
         /// <summary>
         ///  Постфиксный обход дерева
         /// </summary>
@@ -171,27 +136,6 @@ namespace M10.Generics_and_Collections
                     current = null;
                 }
             } while (!stack.IsEmpty);
-        }
-
-        public IEnumerable<T> PostOrderTraversal1()
-        {
-            if (Head != null)
-            {
-                var stack = new Stack<Node<T>>();
-                Node<T> current = Head;
-                stack.Push(current);
-
-                while (stack.Count > 0)
-                {
-                    current = stack.Pop();
-                    yield return current.Value;
-
-                    if (current.Right != null)
-                        stack.Push(current.Right);
-                    if (current.Left != null)
-                        stack.Push(current.Left);
-                }
-            }
         }
 
         /// <summary>
@@ -288,7 +232,6 @@ namespace M10.Generics_and_Collections
                         parent.Left = leftmost;
                     else if (result < 0)
                         parent.Right = leftmost;
-
                 }
             }
         }

@@ -329,6 +329,5 @@ namespace M10.Generics_and_Collections
             return GetEnumerator();
         }
     }
-
-    
+        
 }
