@@ -108,6 +108,8 @@ namespace M10.Generics_and_Collections
         public QueueItem<T> Head { get; private set; }
         QueueItem<T> tail;
         public bool IsEmpty { get { return Head == null; } }
+        private int _count;
+        public int Count { get => _count; private set => _count = value; }
 
         /// <summary>
         /// Добавление элемента в очередь
@@ -123,6 +125,7 @@ namespace M10.Generics_and_Collections
                 tail.Next = item;
                 tail = item;
             }
+            Count++;
         }
 
         /// <summary>
@@ -136,6 +139,7 @@ namespace M10.Generics_and_Collections
             Head = Head.Next;
             if (Head == null)
                 tail = null;
+            Count--;
             return result;
         }
 
@@ -165,6 +169,8 @@ namespace M10.Generics_and_Collections
 
         public StackItem<T> Head { get; private set; }
         StackItem<T> tail;
+        private int _count;
+        public int Count { get => _count; private set => _count = value; }
         public bool IsEmpty { get { return Head == null; } }
 
         /// <summary>
@@ -180,6 +186,7 @@ namespace M10.Generics_and_Collections
                 var item = new StackItem<T> { Value = value, Next = Head };
                 Head = item;
             }
+            Count++;
         }
 
         /// <summary>
@@ -188,12 +195,18 @@ namespace M10.Generics_and_Collections
         /// <returns>очередь без удалённого элемента</returns>
         public T Pop()
         {
-            if (Head == null) throw new InvalidOperationException();
+            if (Head == null) throw new InvalidOperationException("Stack is empty");
             var result = Head.Value;
             Head = Head.Next;
+            Count--;
             if (Head == null)
                 tail = null;
             return result;
+        }
+
+        public T Peek()
+        {
+            return Head.Value;
         }
 
         public IEnumerator<T> GetEnumerator()
@@ -316,4 +329,6 @@ namespace M10.Generics_and_Collections
             return GetEnumerator();
         }
     }
+
+    
 }
