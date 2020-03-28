@@ -56,7 +56,7 @@ namespace StreamsDemo
         public static int InMemoryByByteCopy(string sourcePath, string destinationPath)
         {
             // TODO: step 1. Use StreamReader to read entire file in string
-            var reader = new StreamReader(sourcePath);
+            var reader = new StreamReader(sourcePath, Encoding.UTF8);
             var text = reader.ReadToEnd();
             // TODO: step 2. Create byte array on base string content - use  System.Text.Encoding class
             var byteArray = Encoding.UTF8.GetBytes(text);
@@ -65,14 +65,17 @@ namespace StreamsDemo
             var res = new byte[byteArray.Length];
             for (int i = 0; i < byteArray.Length; i++)
             {
-                memoryStream.WriteByte((byte)i);
+                memoryStream.WriteByte(byteArray[i]);
                 // TODO: step 4. Use MemoryStream instance (from step 3) to write it content in new byte array
+                memoryStream.Position = i;
                 res[i] = (byte)memoryStream.ReadByte();
             }
             // TODO: step 5. Use Encoding class instance (from step 2) to create char array on byte array content
             var charArray = Encoding.UTF8.GetChars(res);
             // TODO: step 6. Use StreamWriter here to write char array content in new file
-            var writer = new StreamWriter(destinationPath);
+            var writer = new StreamWriter(destinationPath, false, Encoding.UTF8);
+           // var writer = new StreamWriter(;
+
             writer.Write(charArray);
             return charArray.Length;
         }
@@ -91,13 +94,15 @@ namespace StreamsDemo
         public static int ByBlockCopy(string sourcePath, string destinationPath)
         {
             int length;
-            using (var reader = new FileStream(sourcePath, FileMode.Open))
+            byte[] buffer = new byte[4096];
+            using (var reader = new FileStream(sourcePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite, 4096))
             {
                 using (var writer = new FileStream(destinationPath, FileMode.Create))
                 {
                     while (reader.Position < reader.Length)
                     {
-                        writer.WriteByte((byte)reader.ReadByte());
+                        reader.Read(buffer, 0, buffer.Length);
+                        writer.Write(buffer, 0, buffer.Length);
                     }
                 }
 
@@ -140,7 +145,16 @@ namespace StreamsDemo
 
         public static bool IsContentEquals(string sourcePath, string destinationPath)
         {
-            throw new NotImplementedException();
+            string t1, t2;
+            using(var st1 = new StreamReader(sourcePath))
+            {
+                t1 = st1.ReadToEnd();
+            }
+            using (var st2 = new StreamReader(sourcePath))
+            {
+                t2 = st2.ReadToEnd();
+            }
+            return t1 == t2;
         }
 
         #endregion
