@@ -55,28 +55,36 @@ namespace StreamsDemo
         /// <returns>Количество записанных байт</returns>
         public static int InMemoryByByteCopy(string sourcePath, string destinationPath)
         {
+            char[] charArray;
             // TODO: step 1. Use StreamReader to read entire file in string
-            var reader = new StreamReader(sourcePath, Encoding.UTF8);
-            var text = reader.ReadToEnd();
-            // TODO: step 2. Create byte array on base string content - use  System.Text.Encoding class
-            var byteArray = Encoding.UTF8.GetBytes(text);
-            // TODO: step 3. Use MemoryStream instance to read from byte array (from step 2)
-            var memoryStream = new MemoryStream();
-            var res = new byte[byteArray.Length];
-            for (int i = 0; i < byteArray.Length; i++)
+            using (var reader = new StreamReader(sourcePath, Encoding.UTF8))
             {
-                memoryStream.WriteByte(byteArray[i]);
-                // TODO: step 4. Use MemoryStream instance (from step 3) to write it content in new byte array
-                memoryStream.Position = i;
-                res[i] = (byte)memoryStream.ReadByte();
-            }
-            // TODO: step 5. Use Encoding class instance (from step 2) to create char array on byte array content
-            var charArray = Encoding.UTF8.GetChars(res);
-            // TODO: step 6. Use StreamWriter here to write char array content in new file
-            var writer = new StreamWriter(destinationPath, false, Encoding.UTF8);
-           // var writer = new StreamWriter(;
+                byte[] res;
+                var text = reader.ReadToEnd();
+                // TODO: step 2. Create byte array on base string content - use  System.Text.Encoding class
+                var byteArray = Encoding.UTF8.GetBytes(text);
+                // TODO: step 3. Use MemoryStream instance to read from byte array (from step 2)
+                using (var memoryStream = new MemoryStream())
+                {
+                    res = new byte[byteArray.Length];
+                    for (int i = 0; i < byteArray.Length; i++)
+                    {
+                        memoryStream.WriteByte(byteArray[i]);
+                        // TODO: step 4. Use MemoryStream instance (from step 3) to write it content in new byte array
+                        memoryStream.Position = i;
+                        res[i] = (byte)memoryStream.ReadByte();
+                    }
+                }
 
-            writer.Write(charArray);
+                // TODO: step 5. Use Encoding class instance (from step 2) to create char array on byte array content
+                charArray = Encoding.UTF8.GetChars(res);
+            }
+
+            // TODO: step 6. Use StreamWriter here to write char array content in new file
+            using (var writer = new StreamWriter(destinationPath, false, Encoding.UTF8))
+            {
+                writer.Write(charArray);
+            }
             return charArray.Length;
         }
 
@@ -99,11 +107,8 @@ namespace StreamsDemo
             {
                 using (var writer = new FileStream(destinationPath, FileMode.Create))
                 {
-                    while (reader.Position < reader.Length)
-                    {
-                        reader.Read(buffer, 0, buffer.Length);
-                        writer.Write(buffer, 0, buffer.Length);
-                    }
+                    reader.Read(buffer, 0, buffer.Length);
+                    writer.Write(buffer, 0, buffer.Length);
                 }
 
                 length = (int)reader.Length;
@@ -115,19 +120,69 @@ namespace StreamsDemo
 
         #region TODO: Implement by block copy logic using MemoryStream.
 
+        /// <summary>
+        ///Копирование содержимого одного тествового файла в другой с 
+        ///использованием класса MemoryStream в качестве потока с резервным хранилищем
+        /// </summary>
+        /// <param name="sourcePath">Файл из которого копируют данные</param>
+        /// <param name="destinationPath">Файл в который копируют данные</param>
+        /// <returns>Количество записанных байт</returns>
         public static int InMemoryByBlockCopy(string sourcePath, string destinationPath)
         {
-            // TODO: Use InMemoryByByteCopy method's approach
-            throw new NotImplementedException();
+            // TODO: Use InMemoryByByteCopy method's approach     
+            char[] charArray;
+            int count;
+            using (var reader = new StreamReader(sourcePath, Encoding.UTF8))
+            {
+                var text = reader.ReadToEnd();
+                var byteArray = Encoding.UTF8.GetBytes(text);
+                using (var memoryStream = new MemoryStream())
+                {
+                    memoryStream.Write(byteArray, 0, byteArray.Length);
+                    var res = new byte[byteArray.Length];
+                    memoryStream.Position = 0;
+                    count = memoryStream.Read(res, 0, res.Length);
+                    charArray = Encoding.UTF8.GetChars(res);
+                }
+            }
+            using (var writer = new StreamWriter(destinationPath, false, Encoding.UTF8))
+            {
+                writer.Write(charArray);
+            }
+            return count;
         }
 
         #endregion
 
         #region TODO: Implement by block copy logic using class-decorator BufferedStream.
 
+        /// <summary>
+        ///Копирование содержимого одного тествового файла в другой, используя
+        ///возможности класса-декоратора потоков BufferedStream
+        /// </summary>
+        /// <param name="sourcePath">Файл из которого копируют данные</param>
+        /// <param name="destinationPath">Файл в который копируют данные</param>
+        /// <returns>Количество записанных байт</returns>
         public static int BufferedCopy(string sourcePath, string destinationPath)
         {
-            throw new NotImplementedException();
+            byte[] byteArray;
+            using (var reader = File.OpenRead(sourcePath))
+            {
+                using (var bufferedStream = new BufferedStream(reader, 20000))
+                {
+                    byteArray = new byte[reader.Length];
+                    var charArray = byteArray;
+                    for (var i = 0; i < byteArray.Length; i++)
+                    {
+                        byteArray[i] = (byte)bufferedStream.ReadByte();//считывание байта из потока reader
+                    }
+                    using (var writer = new FileStream(destinationPath, FileMode.Create))
+                    {
+                        writer.Write(byteArray, 0, byteArray.Length);
+                    }
+                }
+                return byteArray.Length;
+            }
         }
 
         #endregion
@@ -146,7 +201,7 @@ namespace StreamsDemo
         public static bool IsContentEquals(string sourcePath, string destinationPath)
         {
             string t1, t2;
-            using(var st1 = new StreamReader(sourcePath))
+            using (var st1 = new StreamReader(sourcePath))
             {
                 t1 = st1.ReadToEnd();
             }
