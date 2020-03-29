@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 
 namespace StreamsDemo
@@ -189,9 +187,30 @@ namespace StreamsDemo
 
         #region TODO: Implement by line copy logic using FileStream and classes text-adapters StreamReader/StreamWriter
 
+        /// <summary>
+        /// Построчное копирование содержимого одного тествового файла в другой
+        /// </summary>
+        /// <param name="sourcePath">Файл из которого копируют данные</param>
+        /// <param name="destinationPath">Файл в который копируют данные</param>
+        /// <returns>Количество записанных строк</returns>
         public static int ByLineCopy(string sourcePath, string destinationPath)
         {
-            throw new NotImplementedException();
+            var count = 0;
+            using (var reader = new FileStream(sourcePath, FileMode.Open))
+            {
+                using (var reader2 = new StreamReader(reader))
+                {
+                    using(var writer = new StreamWriter(destinationPath))
+                    {
+                        while (!reader2.EndOfStream)
+                        {
+                            writer.WriteLine(reader2.ReadLine());// чтение строки символов из потока и запись в выходной файл
+                            count++;
+                        }
+                    }
+                }
+            }
+            return count;
         }
 
         #endregion
