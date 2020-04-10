@@ -37,13 +37,19 @@ select 'Year'=year(OrderDate), 'Total'=count(OrderDate)  from [Orders] group by 
 -- Написать проверочный запрос, который вычисляет количество всех заказов.
 select count(*) from [Orders]
 --6.2	По таблице Orders найти количество заказов, cделанных каждым продавцом. Заказ для указанного продавца – это любая запись в таблице Orders, где в колонке EmployeeID задано значение для данного продавца. В результатах запроса надо высвечивать колонку с именем продавца (Должно высвечиваться имя полученное конкатенацией LastName & FirstName. Эта строка LastName & FirstName должна быть получена отдельным запросом в колонке основного запроса. Также основной запрос должен использовать группировку по EmployeeID.) с названием колонки ‘Seller’ и колонку c количеством заказов высвечивать с названием 'Amount'. Результаты запроса должны быть упорядочены по убыванию количества заказов. 
-select 'Seller'=(select concat(LastName,FirstName) from [Employees] where [Orders].EmployeeID=[Employees].EmployeeID), 'Amount'=count(EmployeeID) from [Orders] group by EmployeeID order by count(EmployeeID) desc
+select 'Seller'=(select concat(LastName,FirstName) from [Employees] where [Orders].EmployeeID=[Employees].EmployeeID),
+	   'Amount'=count(EmployeeID) from [Orders] group by EmployeeID order by count(EmployeeID) desc;
 --6.3	По таблице Orders найти количество заказов, cделанных каждым продавцом и для каждого покупателя. Необходимо определить это только для заказов сделанных в 1998 году. В результатах запроса надо высвечивать колонку с именем продавца (название колонки ‘Seller’), колонку с именем покупателя (название колонки ‘Customer’)  и колонку c количеством заказов высвечивать с названием 'Amount'. В запросе необходимо использовать специальный оператор языка T-SQL для работы с выражением GROUP (Этот же оператор поможет выводить строку “ALL” в результатах запроса). Группировки должны быть сделаны по ID продавца и покупателя. 
-select 'Seller'=(select concat(LastName,FirstName) from [Employees] where [Orders].EmployeeID=[Employees].EmployeeID), 'Customer'=(select ContactName from [Customers] where [Customers].CustomerID=[Orders].CustomerID)
-
-
-
-
-
-
-
+select 'Seller'=ISNULL((select concat(LastName,FirstName) from [Employees] where [Orders].EmployeeID=[Employees].EmployeeID),'ALL'),
+	   'Customer'=ISNULL((select ContactName from [Customers] where [Customers].CustomerID=[Orders].CustomerID),'ALL'),
+	   'Amount'=Count(*) from Orders WHERE YEAR(OrderDate)=1998 GROUP BY CUBE(EmployeeID,CustomerID) ORDER BY  'Amount' DESC, 'Seller', 'Customer';
+--6.4	Найти покупателей и продавцов, которые живут в одном городе. Если в городе живут только один или несколько продавцов или только один или несколько покупателей,
+--		то информация о таких покупателя и продавцах не должна попадать в результирующий набор. Не использовать конструкцию JOIN. В результатах запроса необходимо вывести
+--		следующие заголовки для результатов запроса: ‘Person’, ‘Type’ (здесь надо выводить строку ‘Customer’ или  ‘Seller’ в завимости от типа записи), ‘City’. Отсортировать результаты запроса по колонке ‘City’ и по ‘Person’.
+select 'Person'=Employees.LastName+' '+Employees.FirstName, 'Seller' AS Type, Employees.City from Employees, Customers where Employees.City=Customers.City UNION
+select Customers.ContactName AS Person, 'Customer' AS Type, Customers.City from Employees, Customers where Employees.City=Customers.City order by 'City', 'Person'
+--6.5	Найти всех покупателей, которые живут в одном городе. В запросе использовать соединение таблицы Customers c собой - самосоединение. Высветить колонки CustomerID
+--		и City. Запрос не должен высвечивать дублируемые записи. Для проверки написать запрос, который высвечивает города, которые встречаются более одного раза в таблице
+--		Customers. Это позволит проверить правильность запроса.
+SELECT  cust1.CustomerID, cust1.City from Customers cust1 JOIN
+Customers cust2 ON cust1.City=cust2.City
