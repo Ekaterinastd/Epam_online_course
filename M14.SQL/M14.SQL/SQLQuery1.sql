@@ -53,3 +53,28 @@ select Customers.ContactName AS Person, 'Customer' AS Type, Customers.City from 
 --		Customers. Ёто позволит проверить правильность запроса.
 SELECT  cust1.CustomerID, cust1.City from Customers cust1 JOIN
 Customers cust2 ON cust1.City=cust2.City
+--6.6	ѕо таблице Employees найти дл€ каждого продавца его руководител€, т.е. кому он делает репорты. ¬ысветить колонки с именами
+--'User Name' (LastName) и 'Boss'.¬ колонках должны быть высвечены имена из колонки LastName. ¬ысвечены ли все продавцы в этом запросе?
+SELECT e1.LastName AS 'User Name', e2.LastName AS 'Boss' FROM Employees e1 JOIN Employees e2 ON e1.ReportsTo=e2.EmployeeID
+--Ќе высвечен продавец, руководитель которого равен NULL
+
+--7.1	ќпределить продавцов, которые обслуживают регион 'Western' (таблица Region). –езультаты запроса должны высвечивать два пол€: 'LastName' продавца
+--и название обслуживаемой территории ('TerritoryDescription' из таблицы Territories). «апрос должен использовать JOIN в предложении FROM.
+--ƒл€ определени€ св€зей между таблицами Employees и Territories надо использовать графические диаграммы дл€ базы Northwind.
+SELECT e1.LastName AS 'Seller', t.TerritoryDescription, r.RegionDescription FROM Employees e1 
+JOIN EmployeeTerritories et ON e1.EmployeeID=et.EmployeeID
+JOIN Territories t ON et.TerritoryID=t.TerritoryID
+JOIN Region r ON t.RegionID=r.RegionID WHERE r.RegionDescription='Western'
+
+--8.1	¬ысветить в результатах запроса имена всех заказчиков из таблицы Customers и суммарное количество их заказов из таблицы Orders.
+--ѕрин€ть во внимание, что у некоторых заказчиков нет заказов, но они также должны быть выведены в результатах запроса. 
+--”пор€дочить результаты запроса по возрастанию количества заказов.
+SELECT c.ContactName AS 'Customer', COUNT(o.OrderID) AS 'Count' FROM Customers c
+LEFT JOIN Orders o ON c.CustomerID=o.CustomerID
+GROUP BY c.ContactName 
+ORDER BY 'Count'
+
+--9.1	¬ысветить всех поставщиков колонка CompanyName в таблице Suppliers, у которых нет хот€ бы одного продукта на складе
+--(UnitsInStock в таблице Products равно 0). »спользовать вложенный SELECT дл€ этого запроса с использованием оператора IN.
+--ћожно ли использовать вместо оператора IN оператор '=' ?
+ SELECT CompanyName AS 'Suppler' FROM Suppliers, 'UnitsInStock'=(SELECT UnitsInStock FROM Products, Suppliers WHERE Products.SupplierID=Suppliers.SupplierID AND UnitsInStock IN (0,0)) --AS 
