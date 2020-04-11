@@ -77,4 +77,13 @@ ORDER BY 'Count'
 --9.1	¬ысветить всех поставщиков колонка CompanyName в таблице Suppliers, у которых нет хот€ бы одного продукта на складе
 --(UnitsInStock в таблице Products равно 0). »спользовать вложенный SELECT дл€ этого запроса с использованием оператора IN.
 --ћожно ли использовать вместо оператора IN оператор '=' ?
- SELECT CompanyName AS 'Suppler' FROM Suppliers, 'UnitsInStock'=(SELECT UnitsInStock FROM Products, Suppliers WHERE Products.SupplierID=Suppliers.SupplierID AND UnitsInStock IN (0,0)) --AS 
+--SELECT CompanyName AS 'Suppler', UnitsInStock FROM Suppliers, Products WHERE Suppliers.SupplierID=Products.SupplierID AND UnitsInStock=0 --работает
+SELECT CompanyName AS 'Suppler' FROM Suppliers INNER JOIN
+Products ON Products.SupplierID=Suppliers.SupplierID WHERE Products.SupplierID IN(SELECT Suppliers.SupplierID FROM Suppliers WHERE UnitsInStock IN(0))
+--¬место оператора IN нельз€ использовать оператор '=' при создании вложенного запроса, потому что оператор сравнени€ может обрабатывать только одну записть, а IN - множество
+
+--10.1	¬ысветить всех продавцов, которые имеют более 150 заказов. »спользовать вложенный коррелированный SELECT.
+SELECT LastName FROM Employees WHERE EmployeeID IN(SELECT EmployeeID FROM Orders GROUP BY EmployeeID HAVING COUNT(OrderID)>150)
+
+--11.1	¬ысветить всех заказчиков (таблица Customers), которые не имеют ни одного заказа (подзапрос по таблице Orders). »спользовать коррелированный SELECT и оператор EXISTS.
+SELECT ContactName FROM Customers WHERE NOT EXISTS(SELECT CustomerID FROM Orders WHERE Customers.CustomerID=Orders.CustomerID)
