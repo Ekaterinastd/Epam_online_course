@@ -87,3 +87,6 @@ SELECT LastName FROM Employees WHERE EmployeeID IN(SELECT EmployeeID FROM Orders
 
 --11.1	Высветить всех заказчиков (таблица Customers), которые не имеют ни одного заказа (подзапрос по таблице Orders). Использовать коррелированный SELECT и оператор EXISTS.
 SELECT ContactName FROM Customers WHERE NOT EXISTS(SELECT CustomerID FROM Orders WHERE Customers.CustomerID=Orders.CustomerID)
+
+--12.1	Для формирования алфавитного указателя Employees высветить из таблицы Employees список только тех букв алфавита, с которых начинаются фамилии
+SELECT DISTINCT LEFT(LastName,1) AS 'First Letter' FROM Employees ORDER BY 'First Letter'
