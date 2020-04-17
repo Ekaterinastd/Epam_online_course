@@ -90,3 +90,10 @@ SELECT ContactName FROM Customers WHERE NOT EXISTS(SELECT CustomerID FROM Orders
 
 --12.1	Для формирования алфавитного указателя Employees высветить из таблицы Employees список только тех букв алфавита, с которых начинаются фамилии
 SELECT DISTINCT LEFT(LastName,1) AS 'First Letter' FROM Employees ORDER BY 'First Letter'
+
+--Procedures
+--13.1 
+EXEC GreatestOrders @Year=1997, @Count=100;
+--проверочная процедура
+EXEC GreatestOrdersCheck 1997, 'Margaret', 'Peacock';
+EXEC GreatestOrdersCheck 1997, 'Janet', 'Leverling';

@@ -19,11 +19,17 @@
     </LogicalFolder>
     <LogicalFolder Name="Queries" Type="0" Sorted="true">
       <Items>
-        <FileNode Name="SQLQuery1.sql">
+        <FileNode Name="Procedures.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-T3MR6C1:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>DESKTOP-T3MR6C1</AssociatedConnSrvName>
           <AssociatedConnUserName />
-          <FullPath>SQLQuery1.sql</FullPath>
+          <FullPath>Procedures.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Query.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-T3MR6C1:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DESKTOP-T3MR6C1</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Query.sql</FullPath>
         </FileNode>
       </Items>
     </LogicalFolder>
