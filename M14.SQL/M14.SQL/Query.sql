@@ -94,6 +94,6 @@ SELECT DISTINCT LEFT(LastName,1) AS 'First Letter' FROM Employees ORDER BY 'Firs
 --Procedures
 --13.1 
 EXEC GreatestOrders @Year=1997, @Count=100;
+
 --проверочная процедура
 EXEC GreatestOrdersCheck 1997, 'Margaret', 'Peacock';
-EXEC GreatestOrdersCheck 1997, 'Janet', 'Leverling';
