@@ -4,18 +4,34 @@
 --Discount при продаже товаров. Процедуре передается год, за который надо сделать отчет, и количество возвращаемых записей. Результаты запроса
 --должны быть упорядочены по убыванию суммы заказа. 
 
+--GO
+--CREATE OR ALTER PROC GreatestOrders(@Year int, @Count int)
+--AS
+--BEGIN 
+--	SELECT DISTINCT TOP (@Count) empl.EmployeeID, empl.FirstName, empl.LastName, ord.OrderID, 'Max price'=MAX((UnitPrice-UnitPrice*Discount)*Quantity)
+--	FROM Employees empl
+--	JOIN Orders ord ON empl.EmployeeID=ord.EmployeeID
+--	JOIN [Order Details] ordDet ON ord.OrderID=ordDet.OrderID
+--	WHERE @Year=YEAR(ord.OrderDate)
+--	GROUP BY empl.EmployeeID, empl.FirstName, empl.LastName, ord.OrderID
+--	ORDER BY 'Max price' DESC
+--END
+
 GO
 CREATE OR ALTER PROC GreatestOrders(@Year int, @Count int)
 AS
 BEGIN 
-	SELECT DISTINCT TOP (@Count) empl.EmployeeID, empl.FirstName, empl.LastName, ord.OrderID, 'Max price'=MAX((UnitPrice-UnitPrice*Discount)*Quantity)
-	FROM Employees empl
-	JOIN Orders ord ON empl.EmployeeID=ord.EmployeeID
+SELECT ord.EmployeeID, ord.OrderID, 'Max price' = (UnitPrice-UnitPrice*Discount)*Quantity
+	FROM Orders ord
 	JOIN [Order Details] ordDet ON ord.OrderID=ordDet.OrderID
-	WHERE @Year=YEAR(ord.OrderDate)
-	GROUP BY empl.EmployeeID, empl.FirstName, empl.LastName, ord.OrderID
+	WHERE @Year=YEAR(ord.OrderDate) AND 'Max price'=
+	(SELECT MAX((UnitPrice-UnitPrice*Discount)*Quantity)
+	FROM Orders ord1
+	JOIN [Order Details] ordDet1 ON ord1.OrderID=ordDet1.OrderID
+	WHERE @Year=YEAR(ord1.OrderDate) AND ord.EmployeeID = ord1.EmployeeID)
 	ORDER BY 'Max price' DESC
 END
+
 
 --проверочная процедура
 GO
