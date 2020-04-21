@@ -59,3 +59,45 @@ BEGIN
 	WHERE [ShippedDelay]>@SpecifiedDelay OR ord.ShippedDate IS NULL
 END
 
+--13.3	 Написать процедуру, которая высвечивает всех подчиненных заданного продавца, как непосредственных, так и подчиненных его подчиненных.
+--В качестве входного параметра функции используется EmployeeID. Необходимо распечатать имена подчиненных и выровнять их в тексте (использовать оператор
+--PRINT) согласно иерархии подчинения. Продавец, для которого надо найти подчиненных также должен быть высвечен. Название процедуры SubordinationInfo.
+--В качестве алгоритма для решения этой задачи надо использовать пример, приведенный в Books Online и рекомендованный Microsoft для решения подобного типа
+--задач. Продемонстрировать использование процедуры.
+GO
+CREATE OR ALTER PROC SubordinationInfo(@EmployeeID int)
+AS
+BEGIN
+DECLARE @Head NVARCHAR(20), @Subordinate NVARCHAR(20), @Subordinate2 NVARCHAR(20)
+
+	SELECT @EmployeeID AS 'Head', subord.EmployeeID AS 'Subordinate', subord2.EmployeeID AS 'Subordinate2' FROM Employees empl
+	JOIN (SELECT EmployeeID FROM Employees WHERE EmployeeID=@EmployeeID) head --выыбираем сотрудника, подчинённых которого надо вывести
+	ON empl.EmployeeID=head.EmployeeID
+	JOIN (SELECT EmployeeID, ReportsTo FROM Employees) subord --подчинённые
+	ON head.EmployeeID=subord.ReportsTo
+	LEFT JOIN (SELECT EmployeeID, ReportsTo FROM Employees) subord2 --подчинённые подчинённых
+	ON subord.EmployeeID=subord2.ReportsTo
+	SET @Head = @EmployeeID;
+	--SET @Subordinate = [subord.EmployeeID];
+
+	PRINT @EmployeeID +  subord.EmployeeID
+END
+
+--GO
+--CREATE OR ALTER PROC SubordinationInfo1(@EmployeeID int)
+--WITH RECURSIVE 
+--Rec(head, subordinate, subordinate2)
+--AS (
+--	SELECT @EmployeeID AS 'Head', subord.EmployeeID AS 'Subordinate', subord2.EmployeeID AS 'Subordinate2' FROM Employees empl
+--	JOIN (SELECT EmployeeID FROM Employees WHERE EmployeeID=@EmployeeID) head --выыбираем сотрудника, подчинённых которого надо вывести
+--	ON empl.EmployeeID=head.EmployeeID
+--	JOIN (SELECT EmployeeID, ReportsTo FROM Employees) subord --подчинённые
+--	ON head.EmployeeID=subord.ReportsTo
+--	LEFT JOIN (SELECT EmployeeID, ReportsTo FROM Employees) subord2 --подчинённые подчинённых
+--	ON subord.EmployeeID=subord2.ReportsTo
+--	UNION ALL
+--	SELECT Rec.
+--	)
+--	WHERE 
+--END
+

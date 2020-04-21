@@ -101,3 +101,7 @@ EXEC GreatestOrdersCheck 1997, 'Margaret', 'Peacock';
 --13.2
 EXEC ShippedOrdersDiff @SpecifiedDelay = 10;
 EXEC ShippedOrdersDiff;
+
+--13.3
+EXEC SubordinationInfo 2;
+EXEC SubordinationInfo1 2;
