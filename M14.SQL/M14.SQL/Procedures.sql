@@ -68,8 +68,6 @@ GO
 CREATE OR ALTER PROC SubordinationInfo(@EmployeeID int)
 AS
 BEGIN
-DECLARE @Head NVARCHAR(20), @Subordinate NVARCHAR(20), @Subordinate2 NVARCHAR(20)
-
 	SELECT @EmployeeID AS 'Head', subord.EmployeeID AS 'Subordinate', subord2.EmployeeID AS 'Subordinate2' FROM Employees empl
 	JOIN (SELECT EmployeeID FROM Employees WHERE EmployeeID=@EmployeeID) head --выбираем сотрудника, подчинённых которого надо вывести
 	ON empl.EmployeeID=head.EmployeeID
@@ -77,10 +75,6 @@ DECLARE @Head NVARCHAR(20), @Subordinate NVARCHAR(20), @Subordinate2 NVARCHAR(20
 	ON head.EmployeeID=subord.ReportsTo
 	LEFT JOIN (SELECT EmployeeID, ReportsTo FROM Employees) subord2 --подчинённые подчинённых
 	ON subord.EmployeeID=subord2.ReportsTo
-	SET @Head = @EmployeeID;
-	--SET @Subordinate = [subord.EmployeeID];
-
-	PRINT @EmployeeID +  subord.EmployeeID
 END;
 
 --GO
