@@ -71,7 +71,7 @@ BEGIN
 DECLARE @Head NVARCHAR(20), @Subordinate NVARCHAR(20), @Subordinate2 NVARCHAR(20)
 
 	SELECT @EmployeeID AS 'Head', subord.EmployeeID AS 'Subordinate', subord2.EmployeeID AS 'Subordinate2' FROM Employees empl
-	JOIN (SELECT EmployeeID FROM Employees WHERE EmployeeID=@EmployeeID) head --выыбираем сотрудника, подчинённых которого надо вывести
+	JOIN (SELECT EmployeeID FROM Employees WHERE EmployeeID=@EmployeeID) head --выбираем сотрудника, подчинённых которого надо вывести
 	ON empl.EmployeeID=head.EmployeeID
 	JOIN (SELECT EmployeeID, ReportsTo FROM Employees) subord --подчинённые
 	ON head.EmployeeID=subord.ReportsTo
@@ -81,7 +81,7 @@ DECLARE @Head NVARCHAR(20), @Subordinate NVARCHAR(20), @Subordinate2 NVARCHAR(20
 	--SET @Subordinate = [subord.EmployeeID];
 
 	PRINT @EmployeeID +  subord.EmployeeID
-END
+END;
 
 --GO
 --CREATE OR ALTER PROC SubordinationInfo1(@EmployeeID int)
@@ -101,3 +101,17 @@ END
 --	WHERE 
 --END
 
+--Написать функцию, которая определяет, есть ли у продавца подчиненные. Возвращает тип данных BIT. В качестве входного параметра функции используется EmployeeID.
+--Название функции IsBoss. Продемонстрировать использование функции для всех продавцов из таблицы Employees.
+GO
+CREATE OR ALTER FUNCTION IsBoss(@EmployeeID int)
+RETURNS BIT 
+AS
+BEGIN
+	IF EXISTS (
+				SELECT EmployeeID FROM Employees
+				WHERE @EmployeeID=ReportsTo
+			  )
+			  RETURN 1
+	RETURN 0
+END

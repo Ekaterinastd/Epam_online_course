@@ -105,3 +105,7 @@ EXEC ShippedOrdersDiff;
 --13.3
 EXEC SubordinationInfo 2;
 EXEC SubordinationInfo1 2;
+
+--13.4
+PRINT dbo.IsBoss(2);
+
