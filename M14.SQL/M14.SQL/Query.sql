@@ -97,3 +97,7 @@ EXEC GreatestOrders @Year=1997, @Count=100;
 
 --проверочная процедура
 EXEC GreatestOrdersCheck 1997, 'Margaret', 'Peacock';
+
+--13.2
+EXEC ShippedOrdersDiff @SpecifiedDelay = 10;
+EXEC ShippedOrdersDiff;
